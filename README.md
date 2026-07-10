@@ -32,8 +32,13 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 
 ---
 
-## Day 2
-*Coming soon...*
+## Day 2 – Prompt Engineering
+
+- Learned the importance of prompt engineering.
+
+- Compared lazy and engineered prompts.
+
+- Observed improvements in AI output quality.
 
 ## Day 3
 *Coming soon...*
