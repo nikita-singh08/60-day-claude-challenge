@@ -45,3 +45,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Learned how assigning different roles changes AI responses.
 - Compared responses from a general prompt, a founder persona, and a developer persona.
 - Documented observations and key learnings.
+
+## Day 4 – Chain-of-Thought Prompting
+
+- Learned how Chain-of-Thought prompting improves AI reasoning.
+- Generated a personalized career roadmap using Claude.
+- Documented key learnings, roadmap, and reflections.
