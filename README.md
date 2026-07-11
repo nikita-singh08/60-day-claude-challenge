@@ -51,3 +51,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Learned how Chain-of-Thought prompting improves AI reasoning.
 - Generated a personalized career roadmap using Claude.
 - Documented key learnings, roadmap, and reflections.
+
+## Day 5 – Context Engineering
+
+- Learned the importance of providing context in AI prompts.
+- Compared AI responses with and without context.
+- Documented observations and practical applications.
+- Understood how context improves personalization and response quality.
