@@ -58,3 +58,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Compared AI responses with and without context.
 - Documented observations and practical applications.
 - Understood how context improves personalization and response quality.
+
+## Day 6 – AI Resume Optimization
+
+- Learned how Applicant Tracking Systems (ATS) evaluate resumes.
+- Used Claude to analyze and optimize my resume.
+- Improved formatting, keyword optimization, and project descriptions.
+- Generated an ATS-friendly one-page resume.
