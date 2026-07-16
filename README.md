@@ -65,3 +65,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Used Claude to analyze and optimize my resume.
 - Improved formatting, keyword optimization, and project descriptions.
 - Generated an ATS-friendly one-page resume.
+
+## Day 7 – Claude Usage Strategy
+
+- Created a personalized Claude usage workflow.
+- Learned how to use Claude for learning, coding, debugging, and career preparation.
+- Documented key strategies, workflow, and reflections.
