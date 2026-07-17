@@ -71,3 +71,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Created a personalized Claude usage workflow.
 - Learned how to use Claude for learning, coding, debugging, and career preparation.
 - Documented key strategies, workflow, and reflections.
+
+## Day 8 – Environmental Health Analyzer
+
+- Generated an Environmental Health Analyzer dashboard using Claude.
+- Tested the HTML application and verified its interactive features.
+- Learned how AI can accelerate frontend dashboard development.
+- Documented the generated application, screenshots, and key learnings.
