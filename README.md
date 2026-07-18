@@ -78,3 +78,11 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Tested the HTML application and verified its interactive features.
 - Learned how AI can accelerate frontend dashboard development.
 - Documented the generated application, screenshots, and key learnings.
+
+## Day 9 – AI-Powered Application Enhancement (NutriScope)
+
+- Built the MVP version of the NutriScope nutrition tracking application using Claude.
+- Enhanced the application with advanced features through iterative prompting.
+- Compared the MVP and enhanced versions.
+- Learned how iterative prompt engineering improves AI-generated software.
+- Documented the application, comparison, screenshots, and key learnings.
