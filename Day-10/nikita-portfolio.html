@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nikita Singh — Full-Stack Developer &amp; AI Builder</title>
+<meta name="description" content="Portfolio of Nikita Singh, B.Tech CSE student building full-stack and AI-driven applications. 250+ LeetCode problems solved, 103-day coding streak.">
+<meta name="keywords" content="Nikita Singh, Full Stack Developer, React, FastAPI, AI, LeetCode, SISTec Bhopal">
+<meta property="og:title" content="Nikita Singh — Full-Stack Developer & AI Builder">
+<meta property="og:description" content="Building scalable web apps and AI-driven solutions. 250+ LeetCode problems, 103-day streak.">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    /* Primary: indigo accent / Secondary: amber accent / Background: near-black */
+    --bg:#0a0e14; --bg-alt:#10151f; --card:#131924; --border:#212a3a;
+    --text:#e7ecf5; --text-dim:#8a94a8; --accent:#4f6bff; --accent2:#f5a623;
+  }
+  .light{
+    --bg:#f7f6f2; --bg-alt:#ffffff; --card:#ffffff; --border:#e3e0d7;
+    --text:#191713; --text-dim:#5c584f; --accent:#3450e0; --accent2:#b5760f;
+  }
+  *{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--text); font-family:system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif; transition:background .3s,color .3s;}
+  .font-display{font-family:system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif; font-weight:700;}
+  .font-mono{font-family:"Courier New", Courier, monospace;}
+  .card{background:var(--card); border:1px solid var(--border);}
+  .text-dim{color:var(--text-dim);}
+  .accent{color:var(--accent);}
+  .bg-accent{background:var(--accent);}
+  .border-accent{border-color:var(--accent);}
+  .accent2{color:var(--accent2);}
+  .bg-accent2{background:var(--accent2);}
+
+  .nav-link{position:relative;}
+  .nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1.5px;background:var(--accent);transition:width .25s;}
+  .nav-link.active::after,.nav-link:hover::after{width:100%;}
+  .nav-link.active{color:var(--accent);}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.show{opacity:1;transform:translateY(0);}
+
+  .skillbar{height:6px;border-radius:999px;background:var(--border);overflow:hidden;}
+  .skillbar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+
+  .tag{border:1px solid var(--border); font-family:"Courier New", Courier, monospace;}
+
+  .proj-card{transition:transform .3s, border-color .3s, box-shadow .3s;}
+  .proj-card:hover{transform:translateY(-6px); border-color:var(--accent); box-shadow:0 20px 40px -20px rgba(124,156,255,.25);}
+
+  .blink{animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .grid-bg{
+    background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+    background-size:48px 48px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+    opacity:.5;
+  }
+
+  ::selection{background:var(--accent); color:#0a0e14;}
+
+  input,textarea{background:var(--bg-alt); border:1px solid var(--border); color:var(--text);}
+  input:focus,textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+
+  .streak-dot{width:10px;height:10px;border-radius:2px;}
+</style>
+</head>
+<body class="light">
+
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b" style="background:color-mix(in srgb, var(--bg) 85%, transparent); border-color:var(--border);">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#home" class="font-display font-bold text-lg">NS<span class="accent">.</span><span class="font-mono text-xs text-dim ml-1">dev</span></a>
+    <div class="hidden md:flex items-center gap-8 font-mono text-sm">
+      <a href="#about" class="nav-link">about</a>
+      <a href="#skills" class="nav-link">skills</a>
+      <a href="#projects" class="nav-link">projects</a>
+      <a href="#achievements" class="nav-link">achievements</a>
+      <a href="#contact" class="nav-link">contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="themeToggle" aria-label="Toggle dark/light mode" class="w-9 h-9 rounded-full card flex items-center justify-center">
+        <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button id="menuBtn" class="md:hidden w-9 h-9 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden flex-col gap-1 px-6 pb-4 font-mono text-sm">
+    <a href="#about" class="py-2 border-b" style="border-color:var(--border)">about</a>
+    <a href="#skills" class="py-2 border-b" style="border-color:var(--border)">skills</a>
+    <a href="#projects" class="py-2 border-b" style="border-color:var(--border)">projects</a>
+    <a href="#achievements" class="py-2 border-b" style="border-color:var(--border)">achievements</a>
+    <a href="#contact" class="py-2">contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+  <div class="absolute inset-0 grid-bg pointer-events-none"></div>
+  <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full pointer-events-none" style="background:radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);"></div>
+  <div class="max-w-6xl mx-auto px-6 relative z-10 w-full grid lg:grid-cols-5 gap-12 items-center">
+
+    <div class="lg:col-span-3">
+      <p class="font-mono text-sm accent mb-4">$ whoami</p>
+      <h1 class="font-display font-bold text-5xl sm:text-7xl leading-tight mb-4">Nikita Singh</h1>
+      <div class="font-mono text-lg sm:text-2xl text-dim mb-8 h-8">
+        <span id="typed"></span><span class="blink accent">_</span>
+      </div>
+      <p class="max-w-xl text-dim mb-10 leading-relaxed">Second-year B.Tech CSE student at SISTec Bhopal, building full-stack web apps and AI-driven tools. 250+ LeetCode problems solved with a 103-day active streak — I like turning hard problems into shipped products.</p>
+      <div class="flex flex-wrap gap-4 mb-12">
+        <a href="#projects" class="px-6 py-3 bg-accent text-white font-medium rounded-lg hover:opacity-90 transition font-mono text-sm">view_projects()</a>
+        <a href="#contact" class="px-6 py-3 card rounded-lg font-mono text-sm hover:border-accent transition">get_in_touch()</a>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="mailto:nikitasingh7673@gmail.com" aria-label="Email" class="text-dim hover:accent transition"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></a>
+        <a href="https://github.com/nikita-singh08" target="_blank" rel="noopener" aria-label="GitHub" class="text-dim hover:accent transition"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.61-3.37-1.21-3.37-1.21-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>
+        <a href="https://www.linkedin.com/in/nikita-singh-b981442b4/" target="_blank" rel="noopener" aria-label="LinkedIn" class="text-dim hover:accent transition"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-3.96 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.68-2.91V8.48z"/></svg></a>
+        <a href="https://leetcode.com/" target="_blank" rel="noopener" class="font-mono text-xs px-3 py-1.5 card rounded-full hover:border-accent transition">LeetCode ↗</a>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 hidden sm:block">
+      <div class="card rounded-xl overflow-hidden shadow-2xl" style="box-shadow:0 30px 60px -30px rgba(0,0,0,.5);">
+        <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color:var(--border); background:var(--bg-alt);">
+          <span class="w-3 h-3 rounded-full" style="background:#ff5f56;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#ffbd2e;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#27c93f;"></span>
+          <span class="font-mono text-xs text-dim ml-2">developer.json</span>
+        </div>
+        <div class="p-5 font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto">
+<pre><span class="text-dim">{</span>
+  <span class="accent2">"name"</span>: <span class="accent">"Nikita Singh"</span>,
+  <span class="accent2">"role"</span>: <span class="accent">"Full-Stack Developer"</span>,
+  <span class="accent2">"stack"</span>: [
+    <span class="accent">"React"</span>, <span class="accent">"TypeScript"</span>,
+    <span class="accent">"FastAPI"</span>, <span class="accent">"MySQL"</span>
+  ],
+  <span class="accent2">"focus"</span>: <span class="accent">"Agentic AI / RAG"</span>,
+  <span class="accent2">"leetcode"</span>: <span class="accent">"250+ solved"</span>,
+  <span class="accent2">"streak"</span>: <span class="accent">"103 days"</span>,
+  <span class="accent2">"status"</span>: <span class="accent">"open_to_work"</span> <span class="blink accent2">●</span>
+<span class="text-dim">}</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 border-t" style="border-color:var(--border)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="reveal">
+      <p class="font-mono text-sm accent mb-2">01 / about</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mb-10">A bit about me</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-10">
+      <div class="md:col-span-2 reveal">
+        <p class="text-dim leading-relaxed text-lg mb-4">I'm a highly motivated second-year B.Tech student with a strong foundation in Data Structures, Algorithms, and full-stack web development. I'm passionate about leveraging modern technologies to build scalable web applications and AI-driven solutions.</p>
+        <p class="text-dim leading-relaxed text-lg mb-4">I build robust backends with Python and FastAPI, craft dynamic interfaces with React and TypeScript, and design efficient databases — all to deliver seamless end-to-end experiences. Consistency matters to me: a 103-day LeetCode streak and 250+ problems solved reflect how I approach learning.</p>
+        <div class="flex flex-wrap gap-2 mt-6">
+          <span class="tag text-xs px-3 py-1.5 rounded-full text-dim">Bhopal, India</span>
+          <span class="tag text-xs px-3 py-1.5 rounded-full text-dim">B.Tech CSE · SISTec</span>
+          <span class="tag text-xs px-3 py-1.5 rounded-full text-dim">CGPA 7.5</span>
+        </div>
+      </div>
+      <div class="reveal card rounded-xl p-6">
+        <p class="font-mono text-xs text-dim mb-4">// coding_stats.json</p>
+        <div class="space-y-4 font-mono text-sm">
+          <div class="flex justify-between"><span class="text-dim">problems_solved</span><span class="accent">250+</span></div>
+          <div class="flex justify-between"><span class="text-dim">active_streak</span><span class="accent2">103 days</span></div>
+          <div class="flex justify-between"><span class="text-dim">badge</span><span>100-Day</span></div>
+          <div class="flex gap-1 pt-2" id="streakGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-24 border-t" style="border-color:var(--border); background:var(--bg-alt);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="reveal">
+      <p class="font-mono text-sm accent mb-2">02 / skills</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mb-12">What I work with</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-x-16 gap-y-6 mb-12">
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>C++ / DSA</span><span class="text-dim">90%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="90"></div></div></div>
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>React.js / TypeScript</span><span class="text-dim">85%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="85"></div></div></div>
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>Python / FastAPI</span><span class="text-dim">85%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="85"></div></div></div>
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>SQL / MySQL</span><span class="text-dim">80%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="80"></div></div></div>
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>Agentic AI / RAG</span><span class="text-dim">70%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="70"></div></div></div>
+      <div class="reveal skill-row"><div class="flex justify-between mb-2 font-mono text-sm"><span>DBMS / OOPs</span><span class="text-dim">85%</span></div><div class="skillbar"><div class="skillbar-fill" data-w="85"></div></div></div>
+    </div>
+    <div class="reveal">
+      <p class="font-mono text-xs text-dim mb-3">languages &amp; tools</p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        <span class="tag text-xs px-3 py-1.5 rounded-full">C++</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Python</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">JavaScript</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">TypeScript</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">SQL</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">React.js</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Vite</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">FastAPI</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">MySQL</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">JDBC</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Git &amp; GitHub</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Figma</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">VS Code</span>
+      </div>
+      <p class="font-mono text-xs text-dim mb-3">soft skills</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Problem Solving</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Consistency</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Team Collaboration</span>
+        <span class="tag text-xs px-3 py-1.5 rounded-full">Communication</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-24 border-t" style="border-color:var(--border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="reveal">
+      <p class="font-mono text-sm accent mb-2">03 / projects</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mb-12">Things I've built</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="proj-card card rounded-xl p-6 reveal flex flex-col">
+        <div class="flex items-start justify-between mb-2">
+          <h3 class="font-display font-bold text-xl">AI Mock Interview Coach</h3>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full tag text-dim whitespace-nowrap">full-stack</span>
+        </div>
+        <p class="text-dim text-sm mb-4 flex-grow">Full-stack AI-powered mock interview platform simulating technical and HR rounds, with real-time flow, AI evaluation, and personalized feedback.</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag text-xs px-2 py-1 rounded">React</span><span class="tag text-xs px-2 py-1 rounded">TypeScript</span><span class="tag text-xs px-2 py-1 rounded">Vite</span><span class="tag text-xs px-2 py-1 rounded">FastAPI</span>
+        </div>
+        <a href="https://github.com/nikita-singh08" target="_blank" rel="noopener" class="font-mono text-xs accent hover:underline inline-flex items-center gap-1">View code ↗</a>
+      </div>
+      <div class="proj-card card rounded-xl p-6 reveal flex flex-col">
+        <div class="flex items-start justify-between mb-2">
+          <h3 class="font-display font-bold text-xl">GuestLog</h3>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full tag text-dim whitespace-nowrap">desktop</span>
+        </div>
+        <p class="text-dim text-sm mb-4 flex-grow">Desktop-based visitor management system with secure admin authentication, entry-exit workflows, and real-time tracking via JDBC and MySQL.</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag text-xs px-2 py-1 rounded">Java Swing</span><span class="tag text-xs px-2 py-1 rounded">MySQL</span><span class="tag text-xs px-2 py-1 rounded">JDBC</span>
+        </div>
+        <a href="https://github.com/nikita-singh08" target="_blank" rel="noopener" class="font-mono text-xs accent hover:underline inline-flex items-center gap-1">View code ↗</a>
+      </div>
+      <div class="proj-card card rounded-xl p-6 reveal flex flex-col">
+        <div class="flex items-start justify-between mb-2">
+          <h3 class="font-display font-bold text-xl">Password Generator</h3>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full tag text-dim whitespace-nowrap">web app</span>
+        </div>
+        <p class="text-dim text-sm mb-4 flex-grow">Responsive web app for generating cryptographically random passwords with customizable length and rule sets, plus one-click copy.</p>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <span class="tag text-xs px-2 py-1 rounded">HTML5</span><span class="tag text-xs px-2 py-1 rounded">CSS3</span><span class="tag text-xs px-2 py-1 rounded">JavaScript</span>
+        </div>
+        <a href="https://github.com/nikita-singh08" target="_blank" rel="noopener" class="font-mono text-xs accent hover:underline inline-flex items-center gap-1">View code ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="py-24 border-t" style="border-color:var(--border); background:var(--bg-alt);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="reveal">
+      <p class="font-mono text-sm accent mb-2">04 / achievements</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mb-12">Milestones &amp; certifications</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="reveal card rounded-xl p-6">
+        <h3 class="font-mono text-sm accent mb-2">CERTIFICATION</h3>
+        <p class="font-display font-semibold text-lg mb-1">Build with Retrieval-Augmented Generation (RAG)</p>
+        <p class="text-dim text-sm">AI Workshop &amp; Competition — SISTec, May 2026</p>
+      </div>
+      <div class="reveal card rounded-xl p-6">
+        <h3 class="font-mono text-sm accent2 mb-2">ACHIEVEMENT</h3>
+        <p class="font-display font-semibold text-lg mb-1">250+ LeetCode Problems Solved</p>
+        <p class="text-dim text-sm">Focused on advanced Data Structures &amp; Algorithms</p>
+      </div>
+      <div class="reveal card rounded-xl p-6">
+        <h3 class="font-mono text-sm accent mb-2">CONSISTENCY</h3>
+        <p class="font-display font-semibold text-lg mb-1">103-Day Coding Streak</p>
+        <p class="text-dim text-sm">Consecutive active days solving problems on LeetCode</p>
+      </div>
+      <div class="reveal card rounded-xl p-6">
+        <h3 class="font-mono text-sm accent2 mb-2">BADGE</h3>
+        <p class="font-display font-semibold text-lg mb-1">LeetCode 100 Days Badge</p>
+        <p class="text-dim text-sm">Awarded for consistency and dedication</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 border-t" style="border-color:var(--border);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="reveal">
+      <p class="font-mono text-sm accent mb-2">05 / contact</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mb-4">Let's build something</h2>
+      <p class="text-dim mb-12 max-w-xl">Open to internships, collaborations, and interesting problems. Reach out directly or drop a message below.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="reveal space-y-4">
+        <a href="mailto:nikitasingh7673@gmail.com" class="flex items-center gap-3 card rounded-lg p-4 hover:border-accent transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+          <span class="font-mono text-sm">nikitasingh7673@gmail.com</span>
+        </a>
+        <a href="tel:+916299057673" class="flex items-center gap-3 card rounded-lg p-4 hover:border-accent transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.33 1.85.56 2.81.69A2 2 0 0 1 22 16.92z"/></svg>
+          <span class="font-mono text-sm">+91 6299057673</span>
+        </a>
+        <a href="https://github.com/nikita-singh08" target="_blank" rel="noopener" class="flex items-center gap-3 card rounded-lg p-4 hover:border-accent transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 accent flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.61-3.37-1.21-3.37-1.21-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+          <span class="font-mono text-sm">github.com/nikita-singh08</span>
+        </a>
+        <a href="https://www.linkedin.com/in/nikita-singh-b981442b4/" target="_blank" rel="noopener" class="flex items-center gap-3 card rounded-lg p-4 hover:border-accent transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 accent flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-3.96 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.68-2.91V8.48z"/></svg>
+          <span class="font-mono text-sm">linkedin.com/in/nikita-singh-b981442b4</span>
+        </a>
+      </div>
+      <form id="contactForm" class="reveal space-y-4">
+        <div>
+          <label class="font-mono text-xs text-dim block mb-1.5">name</label>
+          <input required type="text" class="w-full rounded-lg px-4 py-3 text-sm" placeholder="Your name">
+        </div>
+        <div>
+          <label class="font-mono text-xs text-dim block mb-1.5">email</label>
+          <input required type="email" class="w-full rounded-lg px-4 py-3 text-sm" placeholder="you@example.com">
+        </div>
+        <div>
+          <label class="font-mono text-xs text-dim block mb-1.5">message</label>
+          <textarea required rows="4" class="w-full rounded-lg px-4 py-3 text-sm resize-none" placeholder="Say hello..."></textarea>
+        </div>
+        <button type="submit" class="w-full bg-accent text-white font-mono text-sm py-3 rounded-lg hover:opacity-90 transition">send_message()</button>
+        <p id="formStatus" class="font-mono text-xs text-center accent hidden">Message ready — thanks for reaching out! (Connect a backend to send it live.)</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="py-8 border-t text-center" style="border-color:var(--border);">
+  <p class="font-mono text-xs text-dim">designed &amp; built by Nikita Singh · 2026</p>
+</footer>
+
+<script>
+  // Theme toggle
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  const iconMoon = document.getElementById('iconMoon');
+  const iconSun = document.getElementById('iconSun');
+  function setTheme(light){
+    html.classList.toggle('light', light);
+    iconMoon.classList.toggle('hidden', light);
+    iconSun.classList.toggle('hidden', !light);
+  }
+  setTheme(true);
+  themeBtn.addEventListener('click', () => setTheme(!html.classList.contains('light')));
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden'); mobileMenu.classList.remove('flex');
+  }));
+
+  // Typing animation
+  const phrases = ["Full-Stack Developer", "AI / GenAI Builder", "DSA Enthusiast", "React & FastAPI"];
+  const typedEl = document.getElementById('typed');
+  let pi = 0, ci = 0, deleting = false;
+  function type(){
+    const current = phrases[pi];
+    typedEl.textContent = deleting ? current.slice(0, ci--) : current.slice(0, ci++);
+    let delay = deleting ? 40 : 80;
+    if(!deleting && ci === current.length + 1){ delay = 1400; deleting = true; }
+    else if(deleting && ci === 0){ deleting = false; pi = (pi+1) % phrases.length; delay = 300; }
+    setTimeout(type, delay);
+  }
+  type();
+
+  // Streak grid
+  const streakGrid = document.getElementById('streakGrid');
+  for(let i=0;i<14;i++){
+    const d = document.createElement('div');
+    d.className = 'streak-dot';
+    d.style.background = i < 12 ? 'var(--accent)' : 'var(--border)';
+    d.style.opacity = i < 12 ? (0.4 + Math.random()*0.6) : 1;
+    streakGrid.appendChild(d);
+  }
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('show');
+        if(e.target.querySelectorAll){
+          e.target.querySelectorAll('.skillbar-fill').forEach(f => f.style.width = f.dataset.w + '%');
+        }
+        if(e.target.classList.contains('skill-row')){
+          const f = e.target.querySelector('.skillbar-fill');
+          if(f) f.style.width = f.dataset.w + '%';
+        }
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.15});
+  revealEls.forEach(el => io.observe(el));
+
+  // Active nav highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, {rootMargin: '-40% 0px -50% 0px'});
+  sections.forEach(s => navObserver.observe(s));
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const status = document.getElementById('formStatus');
+    status.classList.remove('hidden');
+    e.target.reset();
+  });
+</script>
+</body>
+</html>

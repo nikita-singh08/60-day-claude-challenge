@@ -86,3 +86,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Compared the MVP and enhanced versions.
 - Learned how iterative prompt engineering improves AI-generated software.
 - Documented the application, comparison, screenshots, and key learnings.
+
+## Day 10 – AI Portfolio Website
+
+- Generated a complete personal portfolio website using Claude.
+- Customized the portfolio with personal information, skills, and projects.
+- Tested the HTML website and verified its responsiveness.
+- Documented the generated website, screenshots, and key learnings.
