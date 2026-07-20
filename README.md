@@ -114,3 +114,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Generated personalized job recommendations with match scores.
 - Reviewed skill gap analysis and market demand insights.
 - Documented career recommendations and key learnings.
+
+## Day 14 – AI Job Red Flag Detector
+
+- Evaluated a job opportunity using AI.
+- Generated a comprehensive job risk analysis report.
+- Reviewed red flags, positive signals, and overall risk score.
+- Prepared for interviews using AI-generated questions.
