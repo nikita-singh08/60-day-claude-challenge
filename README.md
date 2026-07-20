@@ -100,3 +100,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Generated an ATS analysis and identified improvement areas.
 - Created an optimized ATS-friendly resume.
 - Documented the analysis, screenshots, and key learnings.
+
+## Day 12 – AI Job Search & Personal Branding Toolkit
+
+- Generated a complete AI-powered job search and personal branding toolkit.
+- Reviewed ATS recommendations and skill gap analysis.
+- Created an action plan for improving my resume and career profile.
+- Documented generated outputs, screenshots, and key learnings.
