@@ -107,3 +107,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Reviewed ATS recommendations and skill gap analysis.
 - Created an action plan for improving my resume and career profile.
 - Documented generated outputs, screenshots, and key learnings.
+
+## Day 13 – AI Job Discovery with Claude Connectors
+
+- Connected Claude with Indeed using Claude Connectors.
+- Generated personalized job recommendations with match scores.
+- Reviewed skill gap analysis and market demand insights.
+- Documented career recommendations and key learnings.
