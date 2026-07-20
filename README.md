@@ -93,3 +93,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Customized the portfolio with personal information, skills, and projects.
 - Tested the HTML website and verified its responsiveness.
 - Documented the generated website, screenshots, and key learnings.
+
+## Day 11 – AI ATS Resume Optimizer
+
+- Uploaded my resume and a target Job Description (JD).
+- Generated an ATS analysis and identified improvement areas.
+- Created an optimized ATS-friendly resume.
+- Documented the analysis, screenshots, and key learnings.
