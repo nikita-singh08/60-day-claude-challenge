@@ -121,3 +121,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Generated a comprehensive job risk analysis report.
 - Reviewed red flags, positive signals, and overall risk score.
 - Prepared for interviews using AI-generated questions.
+
+## Day 15 – AI Astrology & Life Analysis
+
+- Generated a personalized astrology and life analysis report using Claude.
+- Reviewed career, wealth, relationship, and life pattern insights.
+- Documented important observations and key learnings.
+- Saved report screenshots and supporting files.
