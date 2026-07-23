@@ -128,3 +128,17 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Reviewed career, wealth, relationship, and life pattern insights.
 - Documented important observations and key learnings.
 - Saved report screenshots and supporting files.
+
+## Day 16 – Claude Custom Skill: Stock Fundamental Research
+
+- Created a reusable Claude Custom Skill for stock fundamental research.
+- Generated a detailed stock analysis report.
+- Reviewed valuation metrics, ownership trends, and investment insights.
+- Documented screenshots and key learnings.
+
+## Day 17 – AI Vehicle Cost Analysis Dashboard
+
+- Generated an interactive Vehicle Cost Analysis Dashboard using Claude.
+- Analyzed fuel costs, maintenance expenses, and environmental impact.
+- Reviewed KPI cards, charts, and break-even calculations.
+- Documented screenshots, generated HTML dashboard, and key learnings.
