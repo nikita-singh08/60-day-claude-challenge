@@ -142,3 +142,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Analyzed fuel costs, maintenance expenses, and environmental impact.
 - Reviewed KPI cards, charts, and break-even calculations.
 - Documented screenshots, generated HTML dashboard, and key learnings.
+
+## Day 18 – Claude Custom Skill: Brain Dump Action Planner
+
+- Created a reusable Claude Custom Skill for organizing unstructured notes.
+- Generated an interactive HTML dashboard with summaries, action items, blockers, and conflicts.
+- Tested the skill using multiple note formats.
+- Documented screenshots and key learnings.
