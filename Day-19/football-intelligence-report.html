@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Football Intelligence Profile</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --pitch-dark:#0B3D2E;
+  --pitch:#155C3F;
+  --grass:#2E8B57;
+  --chalk:#F4F2EA;
+  --gold:#C9A227;
+  --navy:#0F1D24;
+  --ink:#16241E;
+  --line: rgba(244,242,234,0.14);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background: var(--navy);
+  color: var(--chalk);
+  font-family: 'Inter', sans-serif;
+  line-height:1.5;
+}
+
+.wrap{max-width:880px;margin:0 auto;padding:0 0 60px;}
+
+/* HERO */
+.hero{
+  background:
+    radial-gradient(circle at 85% -10%, rgba(201,162,39,0.18), transparent 45%),
+    linear-gradient(180deg, var(--pitch-dark) 0%, var(--pitch) 100%);
+  padding:56px 40px 44px;
+  border-bottom:4px solid var(--gold);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 68px);
+  pointer-events:none;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:3px;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+h1{
+  font-family:'Oswald', sans-serif;
+  font-weight:700;
+  font-size:44px;
+  letter-spacing:0.5px;
+  margin:0 0 6px;
+  text-transform:uppercase;
+}
+.subtitle{color:rgba(244,242,234,0.75); font-size:15px; margin:0;}
+.matchday{
+  display:flex; gap:28px; margin-top:26px; flex-wrap:wrap;
+}
+.md-stat{font-family:'IBM Plex Mono',monospace;}
+.md-stat .num{font-size:26px; font-weight:600; color:var(--gold); display:block;}
+.md-stat .lbl{font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(244,242,234,0.6);}
+
+/* SECTIONS */
+section{padding:40px 40px 8px;}
+.sec-head{display:flex; align-items:baseline; gap:12px; margin-bottom:26px;}
+.sec-tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; color:var(--pitch-dark);
+  background:var(--gold);
+  padding:3px 8px;
+  border-radius:2px;
+  letter-spacing:1px;
+}
+h2{
+  font-family:'Oswald', sans-serif;
+  text-transform:uppercase;
+  font-size:22px;
+  letter-spacing:0.5px;
+  margin:0;
+  color:var(--chalk);
+}
+
+/* PREDICTION CARDS */
+.podium{display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:8px;}
+.pcard{
+  background:rgba(244,242,234,0.04);
+  border:1px solid var(--line);
+  border-left:4px solid var(--gold);
+  border-radius:6px;
+  padding:20px 22px;
+}
+.pcard.gold{border-left-color:#E4C55E;}
+.pcard.silver{border-left-color:#C7CDD6;}
+.pcard.bronze{border-left-color:#8FBF8F;}
+.pcard-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.pcard-title{font-family:'Oswald',sans-serif; font-size:18px; text-transform:uppercase; letter-spacing:0.3px;}
+.pcard-role{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; color:rgba(244,242,234,0.55); text-transform:uppercase;}
+.conf-row{display:flex; align-items:center; gap:10px; margin:10px 0 12px;}
+.conf-bar{flex:1; height:8px; background:rgba(244,242,234,0.1); border-radius:4px; overflow:hidden;}
+.conf-fill{height:100%; background:linear-gradient(90deg, var(--gold), #E9D27A); border-radius:4px;}
+.conf-pct{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gold); min-width:38px; text-align:right;}
+.pcard p{font-size:13.5px; color:rgba(244,242,234,0.82); margin:6px 0;}
+.pcard .risk{color:rgba(244,242,234,0.6); font-size:12.5px;}
+
+/* PLAYERS TO WATCH */
+.players{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:18px 0 10px;}
+.player{
+  background:rgba(244,242,234,0.03);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:12px 14px;
+}
+.player .name{font-weight:600; font-size:14px;}
+.player .why{font-size:12px; color:rgba(244,242,234,0.6); margin-top:3px;}
+
+/* SCOREBOARD */
+.scoreboard{
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:26px 28px;
+  display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+}
+.score-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:52px; font-weight:600; color:var(--gold); line-height:1;
+}
+.score-side{flex:1; min-width:200px;}
+.badge{
+  display:inline-block; margin-top:8px;
+  background:var(--gold); color:var(--pitch-dark);
+  font-family:'Oswald',sans-serif; font-weight:600; font-size:13px;
+  text-transform:uppercase; letter-spacing:0.5px;
+  padding:4px 12px; border-radius:3px;
+}
+.kg-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px;}
+.kg-box h4{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1.5px;
+  text-transform:uppercase; color:rgba(244,242,234,0.55); margin:0 0 6px;
+}
+.kg-box p{margin:0; font-size:13.5px;}
+
+/* HEAD TO HEAD */
+.h2h{margin:20px 0 10px;}
+.h2h-row{margin-bottom:18px;}
+.h2h-labels{display:flex; justify-content:space-between; font-family:'Oswald',sans-serif; font-size:14px; text-transform:uppercase; margin-bottom:6px;}
+.h2h-labels .messi{color:#6FB7E8;}
+.h2h-labels .ronaldo{color:#E88A6F;}
+.h2h-track{display:flex; height:14px; border-radius:7px; overflow:hidden; background:rgba(244,242,234,0.08);}
+.h2h-messi{background:linear-gradient(90deg,#3E7FAE,#6FB7E8);}
+.h2h-ronaldo{background:linear-gradient(90deg,#E88A6F,#B4553B);}
+
+.trait-list{font-size:13.5px; color:rgba(244,242,234,0.85); margin:14px 0;}
+.trait-list li{margin-bottom:6px;}
+
+.archetype{
+  background:linear-gradient(135deg, rgba(201,162,39,0.12), rgba(244,242,234,0.03));
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:22px 24px;
+  margin:18px 0;
+}
+.archetype .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--gold); text-transform:uppercase;}
+.archetype h3{font-family:'Oswald',sans-serif; font-size:26px; text-transform:uppercase; margin:6px 0 10px;}
+.trait-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+.chip{
+  font-family:'IBM Plex Mono',monospace; font-size:11px;
+  border:1px solid var(--line); border-radius:20px;
+  padding:4px 12px; color:rgba(244,242,234,0.8);
+}
+
+/* RECS */
+.recs{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0;}
+.rec{
+  background:rgba(244,242,234,0.03);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:16px 18px;
+}
+.rec .k{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold);}
+.rec .v{font-family:'Oswald',sans-serif; font-size:17px; margin-top:4px; text-transform:uppercase;}
+
+/* SUMMARY */
+.summary{
+  margin:30px 40px 40px;
+  padding:26px 28px;
+  border-top:3px solid var(--gold);
+  background:rgba(244,242,234,0.03);
+  border-radius:0 0 8px 8px;
+  font-size:14px;
+  color:rgba(244,242,234,0.88);
+}
+.summary h2{margin-bottom:14px;}
+
+.footer-note{
+  text-align:center; font-family:'IBM Plex Mono',monospace;
+  font-size:11px; color:rgba(244,242,234,0.4);
+  letter-spacing:1px; padding:10px 40px 0;
+}
+
+@media (max-width:600px){
+  .hero{padding:40px 22px 34px;}
+  section{padding:32px 22px 4px;}
+  .summary{margin:24px 22px 30px;}
+  h1{font-size:32px;}
+  .players, .recs, .kg-grid{grid-template-columns:1fr;}
+  .scoreboard{flex-direction:column; align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">ABTalks &middot; Match Report</div>
+    <h1>Football Intelligence Profile</h1>
+    <p class="subtitle">World Cup 2026 outlook, awareness score, and legend-match personality read — built from the ABTalks World Cup Intelligence dataset.</p>
+    <div class="matchday">
+      <div class="md-stat"><span class="num">88</span><span class="lbl">Awareness Score</span></div>
+      <div class="md-stat"><span class="num">78%</span><span class="lbl">Messi Match</span></div>
+      <div class="md-stat"><span class="num">ARG</span><span class="lbl">Predicted Winner</span></div>
+    </div>
+  </div>
+
+  <!-- STAGE 1 -->
+  <section>
+    <div class="sec-head"><span class="sec-tag">Stage 1</span><h2>World Cup 2026 Prediction</h2></div>
+
+    <div class="podium">
+      <div class="pcard gold">
+        <div class="pcard-top">
+          <div class="pcard-title">🥇 Argentina — Winner</div>
+          <div class="pcard-role">Defending Champion</div>
+        </div>
+        <div class="conf-row">
+          <div class="conf-bar"><div class="conf-fill" style="width:38%"></div></div>
+          <div class="conf-pct">38%</div>
+        </div>
+        <p>Highest current Form Score (92) · 68% historical win rate · Opened with a 3-0 win over Algeria · Messi rated 96, top of the dataset.</p>
+        <p class="risk">Risk: Spain (91), France (90) and England (89) sit within striking distance — one of the tightest fields in years.</p>
+      </div>
+
+      <div class="pcard silver">
+        <div class="pcard-top">
+          <div class="pcard-title">🥈 France — Runner-up</div>
+          <div class="pcard-role">Back-to-Back Finalist</div>
+        </div>
+        <div class="conf-row">
+          <div class="conf-bar"><div class="conf-fill" style="width:30%"></div></div>
+          <div class="conf-pct">30%</div>
+        </div>
+        <p>Form Score 90 · Finalists in the last two World Cups · Opened with a clean 2-0 win over Senegal · Mbappé rated 95.</p>
+        <p class="risk">Risk: Group includes Norway's Haaland (25 goals, tournament-high) · history shows France rarely repeats as champion.</p>
+      </div>
+
+      <div class="pcard bronze">
+        <div class="pcard-top">
+          <div class="pcard-title">🐴 Morocco — Dark Horse</div>
+          <div class="pcard-role">2022 Semifinalist</div>
+        </div>
+        <div class="conf-row">
+          <div class="conf-bar"><div class="conf-fill" style="width:20%"></div></div>
+          <div class="conf-pct">20%</div>
+        </div>
+        <p>Form Score 86 despite a lower FIFA rank (12th) · held Brazil to a 1-1 draw in the opener · first African nation to reach a WC semifinal.</p>
+        <p class="risk">Risk: squad depth and fatigue over a long tournament run have hurt deep pushes before.</p>
+      </div>
+    </div>
+
+    <div class="players">
+      <div class="player"><div class="name">Lionel Messi 🇦🇷</div><div class="why">96 rating · 20G/12A · dataset's top-rated player</div></div>
+      <div class="player"><div class="name">Kylian Mbappé 🇫🇷</div><div class="why">95 rating · 22 goals · sharpest pure finisher</div></div>
+      <div class="player"><div class="name">Erling Haaland 🇳🇴</div><div class="why">25 goals · tournament-high scorer, even in a tough group</div></div>
+      <div class="player"><div class="name">Jude Bellingham 🏴</div><div class="why">91 rating · 10G/9A · England's rise depends on him</div></div>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section>
+    <div class="sec-head"><span class="sec-tag">Stage 2</span><h2>Football Awareness Score</h2></div>
+    <div class="scoreboard">
+      <div class="score-num">88<span style="font-size:22px;color:rgba(244,242,234,0.4);">/100</span></div>
+      <div class="score-side">
+        <div class="badge">Football Follower</div>
+        <div class="kg-grid">
+          <div class="kg-box"><h4>Strongest Areas</h4><p>World Cup history &amp; core terminology (hat-trick, Golden Boot, past winners)</p></div>
+          <div class="kg-box"><h4>Growth Areas</h4><p>Tactical nuance, current squad form, advanced rules (offside, VAR)</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section>
+    <div class="sec-head"><span class="sec-tag">Stage 3</span><h2>Messi vs Ronaldo Personality Match</h2></div>
+
+    <div class="h2h">
+      <div class="h2h-row">
+        <div class="h2h-labels"><span class="messi">Messi — 78%</span><span class="ronaldo">Ronaldo — 61%</span></div>
+        <div class="h2h-track">
+          <div class="h2h-messi" style="width:56%"></div>
+          <div class="h2h-ronaldo" style="width:44%"></div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="trait-list">
+      <li><strong>Shared democratic leadership</strong> — you split leadership rather than command, mirroring Messi's quiet, lead-by-example style.</li>
+      <li><strong>Team-first instinct</strong> — your preference for sharing credit reflects Messi's assist-driven, teammate-elevating game.</li>
+      <li><strong>Calculated decision-making</strong> — you analyze before deciding, echoing Messi's patient, chess-like reading of the game.</li>
+      <li><strong>Ronaldo-grade work ethic</strong> — your audacious goal-setting and drive to keep working past the target line up with Ronaldo's relentless training regime.</li>
+    </ul>
+
+    <div class="archetype">
+      <div class="tag">Your Archetype</div>
+      <h3>Tactical Visionary</h3>
+      <p>You lead through intelligence and preparation rather than emotion or ego — reading situations several steps ahead, valuing team cohesion over personal spotlight, and favoring proven, methodical approaches over improvisation, all backed by real ambition and staying power.</p>
+      <div class="trait-chips">
+        <span class="chip">Strategic thinking</span>
+        <span class="chip">Team-first mindset</span>
+        <span class="chip">Calm under pressure</span>
+        <span class="chip">Methodical preparation</span>
+        <span class="chip">High personal standards</span>
+      </div>
+    </div>
+
+    <div class="recs">
+      <div class="rec"><div class="k">Player</div><div class="v">Luka Modrić</div></div>
+      <div class="rec"><div class="k">Club</div><div class="v">Manchester City</div></div>
+      <div class="rec"><div class="k">National Team</div><div class="v">Croatia</div></div>
+      <div class="rec"><div class="k">Rivalry</div><div class="v">Messi vs Ronaldo</div></div>
+    </div>
+  </section>
+
+  <div class="summary">
+    <h2 style="border:none; padding:0;">Key Insights Summary</h2>
+    <p>You're a <strong>Football Follower (88/100)</strong> with sharper fundamentals than your self-rating suggested — don't undersell your instincts. Personality-wise, you're a <strong>Tactical Visionary</strong> leaning <strong>78% Messi</strong>: quiet leadership, team-first thinking, and careful analysis, backed by Ronaldo-level ambition and work ethic. On the pitch, Argentina holds a narrow 38% edge for the 2026 title, but Spain, France, and England remain within one big result of the top spot — this is shaping up to be one of the most contested World Cups in recent memory.</p>
+  </div>
+
+  <div class="footer-note">ABTALKS · FOOTBALL INTELLIGENCE HUB · GENERATED FROM WORLDCUP_INTELLIGENCE_MASTER.XLSX</div>
+</div>
+</body>
+</html>
