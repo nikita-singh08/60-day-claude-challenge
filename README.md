@@ -156,3 +156,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Completed football knowledge assessment and Football IQ quiz.
 - Reviewed FIFA World Cup 2026 predictions and awareness score.
 - Generated a personalized Football Intelligence Profile and documented key learnings.
+
+## Day 20 – AI Face Puzzle Game
+
+- Generated an interactive Face Puzzle Game using Claude.
+- Captured images through the webcam and created sliding puzzles.
+- Tested puzzle gameplay, timer, move counter, and leaderboard.
+- Documented screenshots, generated HTML application, and key learnings.
