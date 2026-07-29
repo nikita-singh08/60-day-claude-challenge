@@ -163,3 +163,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Captured images through the webcam and created sliding puzzles.
 - Tested puzzle gameplay, timer, move counter, and leaderboard.
 - Documented screenshots, generated HTML application, and key learnings.
+
+## Day 21 – Digital Privacy Dashboard
+
+- Generated an interactive Digital Privacy Dashboard using Claude.
+- Reviewed Digital Footprint Score, Privacy Score, and Exposure Heatmap.
+- Analyzed Risk Radar, Digital Twin Profile, and privacy improvement recommendations.
+- Documented screenshots, generated HTML dashboard, and key learnings.
