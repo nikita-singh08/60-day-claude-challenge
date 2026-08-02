@@ -86,8 +86,3 @@ Today's task demonstrated how AI can assist founders in validating startup ideas
 # Files Included
 
 - day22.md
-- startup-validation-report.pdf (or HTML if applicable)
-- founder-market-fit.png
-- competitor-analysis.png
-- market-gap.png
-- action-plan.png
