@@ -184,3 +184,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Reviewed the Ideal Customer Profile (ICP), Buyer Persona, Customer Journey, Pain Points, and MVP Recommendations.
 - Studied MoSCoW Prioritization, Pricing Hypothesis, Business Risks, and Founder Action Sheet.
 - Documented screenshots, generated report, and key learnings.
+
+## Day 25 – AI Shark Tank Simulator
+
+- Built an AI-powered Shark Tank Simulator using Claude AI.
+- Evaluated a startup idea through AI investor questions and startup scorecards.
+- Reviewed funding recommendations, valuation analysis, investment decisions, and leaderboard functionality.
+- Documented screenshots, generated HTML application, and key learnings.
