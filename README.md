@@ -198,3 +198,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Simulated patient intake, document collection, payer submission, approval, denial, and appeal workflows.
 - Tested journey tracking, workflow dashboards, and educational summaries.
 - Documented screenshots, generated HTML application, and key learnings.
+
+## Day 27 – Prior Authorization Story Simulator
+
+- Built an interactive Prior Authorization Story Simulator using Claude AI.
+- Followed a patient’s healthcare journey through multiple story chapters and branching decisions.
+- Explored educational explanations, progress tracking, approval workflow, and alternate dialogue paths.
+- Documented screenshots, generated HTML application, and key learnings.
