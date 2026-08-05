@@ -191,3 +191,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Evaluated a startup idea through AI investor questions and startup scorecards.
 - Reviewed funding recommendations, valuation analysis, investment decisions, and leaderboard functionality.
 - Documented screenshots, generated HTML application, and key learnings.
+
+## Day 26 – Prior Authorization Workflow Simulator
+
+- Built an AI-powered Prior Authorization Workflow Simulator using Claude AI.
+- Simulated patient intake, document collection, payer submission, approval, denial, and appeal workflows.
+- Tested journey tracking, workflow dashboards, and educational summaries.
+- Documented screenshots, generated HTML application, and key learnings.
