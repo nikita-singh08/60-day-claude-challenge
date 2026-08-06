@@ -212,3 +212,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Simulated provider details, diagnosis selection, prior authorization, documentation review, and admission readiness scoring.
 - Tested governance dashboards, workflow improvements, and multiple patient scenarios.
 - Documented screenshots, generated HTML application, and key learnings.
+
+## Day 29 – Operation Lifeline: Supply Chain Crisis Simulator
+
+- Built an AI-powered React-based Supply Chain Crisis Simulator using Claude AI.
+- Simulated crisis response planning, supplier negotiations, executive leadership decisions, and AI investment strategies.
+- Tested multiple scenarios and analyzed business performance through an interactive executive dashboard.
