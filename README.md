@@ -205,3 +205,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Followed a patient’s healthcare journey through multiple story chapters and branching decisions.
 - Explored educational explanations, progress tracking, approval workflow, and alternate dialogue paths.
 - Documented screenshots, generated HTML application, and key learnings.
+
+## Day 28 – Hospital Admission Readiness Simulator
+
+- Built an AI-powered Hospital Admission Readiness Simulator using Claude AI.
+- Simulated provider details, diagnosis selection, prior authorization, documentation review, and admission readiness scoring.
+- Tested governance dashboards, workflow improvements, and multiple patient scenarios.
+- Documented screenshots, generated HTML application, and key learnings.
