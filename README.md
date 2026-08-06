@@ -218,3 +218,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Built an AI-powered React-based Supply Chain Crisis Simulator using Claude AI.
 - Simulated crisis response planning, supplier negotiations, executive leadership decisions, and AI investment strategies.
 - Tested multiple scenarios and analyzed business performance through an interactive executive dashboard.
+
+## Day 30 – Supply Chain Strategy Simulator
+
+- Built an AI-powered Supply Chain Strategy Simulator using Claude AI.
+- Simulated supplier selection, factory location, warehouse planning, transportation, and inventory management decisions.
+- Evaluated business metrics, supply chain score, operational risks, and optimization strategies through an interactive dashboard.
