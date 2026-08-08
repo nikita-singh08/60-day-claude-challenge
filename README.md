@@ -224,3 +224,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Built an AI-powered Supply Chain Strategy Simulator using Claude AI.
 - Simulated supplier selection, factory location, warehouse planning, transportation, and inventory management decisions.
 - Evaluated business metrics, supply chain score, operational risks, and optimization strategies through an interactive dashboard.
+
+## Day 31 – AI Supply Chain Control Tower
+
+- Built an AI-powered Supply Chain Control Tower using Claude AI.
+- Simulated operational alert monitoring, incident prioritization, corrective action selection, and KPI management.
+- Evaluated operational performance through an interactive dashboard and replayed scenarios to improve decision-making.
