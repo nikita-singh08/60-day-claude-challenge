@@ -230,3 +230,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Built an AI-powered Supply Chain Control Tower using Claude AI.
 - Simulated operational alert monitoring, incident prioritization, corrective action selection, and KPI management.
 - Evaluated operational performance through an interactive dashboard and replayed scenarios to improve decision-making.
+
+## Day 32 – Marketing Strategy Simulator
+
+- Built an AI-powered Marketing Strategy Simulator using Claude AI.
+- Simulated target audience analysis, marketing platform selection, content pillars, and a 30-day marketing roadmap.
+- Tested randomized marketing events and evaluated the final Growth Report across different business and personal-brand scenarios.
