@@ -236,3 +236,9 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Built an AI-powered Marketing Strategy Simulator using Claude AI.
 - Simulated target audience analysis, marketing platform selection, content pillars, and a 30-day marketing roadmap.
 - Tested randomized marketing events and evaluated the final Growth Report across different business and personal-brand scenarios.
+
+## Day 33 – Media Integrity Analyzer
+
+- Built an AI-powered Media Integrity Analyzer using Claude AI.
+- Tested headline analysis, headline rewriting, emotional manipulation detection, and live media-integrity metrics.
+- Evaluated randomized scenarios through an interactive Media Integrity Dashboard.
