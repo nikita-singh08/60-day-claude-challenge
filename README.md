@@ -242,3 +242,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Built an AI-powered Media Integrity Analyzer using Claude AI.
 - Tested headline analysis, headline rewriting, emotional manipulation detection, and live media-integrity metrics.
 - Evaluated randomized scenarios through an interactive Media Integrity Dashboard.
+
+## Day 34 – Marketing Detective
+
+- Built an AI-powered Marketing Detective using Claude AI.
+- Investigated randomized marketing campaigns by analyzing and organizing campaign evidence.
+- Identified primary marketing mistakes and reviewed expert explanations and verdicts.
+- Studied the Marketing Learning Report and replayed multiple randomized marketing cases.
