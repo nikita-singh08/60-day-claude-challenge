@@ -249,3 +249,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Investigated randomized marketing campaigns by analyzing and organizing campaign evidence.
 - Identified primary marketing mistakes and reviewed expert explanations and verdicts.
 - Studied the Marketing Learning Report and replayed multiple randomized marketing cases.
+
+## Day 35 – Prompt Puzzle
+
+- Built an interactive Prompt Puzzle application using Claude AI.
+- Tested prompt-solving challenges across different domains and difficulty levels.
+- Reviewed the Prompt Performance Report to evaluate prompt effectiveness.
+- Replayed the puzzle with another domain or difficulty to compare results.
