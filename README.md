@@ -256,3 +256,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Tested prompt-solving challenges across different domains and difficulty levels.
 - Reviewed the Prompt Performance Report to evaluate prompt effectiveness.
 - Replayed the puzzle with another domain or difficulty to compare results.
+
+## Day 36 – Cognitive Pattern Explorer
+
+- Built an interactive Cognitive Pattern Explorer using Claude AI.
+- Explored everyday scenarios, drag-and-drop activities, and thinking sequences in Calm and Stress modes.
+- Reviewed the personalized Reflection Journal and compared thinking tendencies across different chapters.
+- Replayed the experience in the opposite mode to observe changes in responses and thinking patterns.

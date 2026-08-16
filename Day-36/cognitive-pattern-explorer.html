@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognitive Pattern Explorer</title>
+<style>
+  :root{
+    --bg1:#eef1f8; --bg2:#e4ebf5; --panel:#ffffff; --panel-soft:#f6f8fc;
+    --border:rgba(20,30,60,0.08); --text:#232a3d; --muted:#6b7591;
+    --accent:#6c7ee1; --accent2:#7fd8c8; --accent3:#f0a9a0;
+    --grad: linear-gradient(135deg,#6c7ee1,#7fd8c8);
+    --shadow: 0 20px 50px rgba(40,50,90,0.12);
+    --radius:20px;
+    --dur:.5s;
+  }
+  [data-mode="stress"]{
+    --bg1:#f7f2ec; --bg2:#f2e9df; --panel:#fffdfa; --panel-soft:#faf4ec;
+    --accent:#e0935f; --accent2:#e8b975; --accent3:#d97d6b;
+    --grad: linear-gradient(135deg,#e0935f,#e8b975);
+    --border:rgba(90,60,30,0.1);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;min-height:100%;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 10%, var(--bg2), var(--bg1) 60%);
+    color:var(--text);
+    min-height:100vh;
+    transition:background var(--dur) ease;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001s !important; transition-duration:.001s !important; scroll-behavior:auto !important; }
+  }
+  .reduced-motion *{ animation-duration:.001s !important; transition-duration:.001s !important; }
+
+  /* ambient background blobs */
+  .ambient{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;}
+  .blob{
+    position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;
+    background:var(--grad);
+    animation: float 18s ease-in-out infinite;
+  }
+  .blob.b1{width:340px;height:340px;top:-100px;left:-80px;animation-delay:0s;}
+  .blob.b2{width:280px;height:280px;bottom:-90px;right:-60px;animation-delay:4s;}
+  .blob.b3{width:200px;height:200px;top:40%;right:10%;animation-delay:8s;opacity:.2;}
+  @keyframes float{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(30px,-24px) scale(1.08);}
+  }
+
+  #app{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:26px 18px 90px;}
+
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .logo{
+    width:42px;height:42px;border-radius:14px;background:var(--grad);
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+    box-shadow:0 8px 22px rgba(108,126,225,0.35);
+  }
+  .brand h1{margin:0;font-size:17px;font-weight:700;}
+  .brand span{color:var(--muted);font-size:12px;}
+  .mode-toggle{
+    display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);
+    border-radius:999px;padding:4px;box-shadow:var(--shadow);
+  }
+  .mode-toggle button{
+    border:none;background:transparent;border-radius:999px;padding:8px 14px;font-size:12.5px;
+    cursor:pointer;color:var(--muted);font-weight:600;transition:.25s;
+  }
+  .mode-toggle button.active{background:var(--grad);color:#fff;}
+
+  .progress-wrap{margin-bottom:22px;}
+  .progress-track{height:8px;background:var(--panel);border:1px solid var(--border);border-radius:999px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--grad);transition:width .6s ease;}
+  .steps-row{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:var(--muted);}
+
+  .card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:30px;box-shadow:var(--shadow);
+    animation:cardIn var(--dur) ease;
+  }
+  @keyframes cardIn{ from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+
+  h2{margin-top:0;font-size:23px;font-weight:700;}
+  h3{font-size:16px;margin:0 0 10px;}
+  p{line-height:1.65;color:var(--text);}
+  .muted{color:var(--muted);}
+  .lede{color:var(--muted);font-size:14.5px;margin-top:-6px;}
+
+  button.primary, button.secondary, button.ghost{
+    font-family:inherit;cursor:pointer;border:none;border-radius:12px;
+    padding:13px 22px;font-size:14px;font-weight:600;transition:.2s transform,.2s box-shadow,.2s background;
+  }
+  button.primary{background:var(--grad);color:#fff;}
+  button.primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(108,126,225,0.35);}
+  button.secondary{background:var(--panel-soft);color:var(--text);border:1px solid var(--border);}
+  button.secondary:hover{transform:translateY(-2px);}
+  button.ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+  button.ghost:hover{color:var(--text);border-color:var(--accent);}
+  button:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  button:focus-visible, .card :focus-visible, .choice-card:focus-visible, .drag-card:focus-visible{
+    outline:3px solid var(--accent); outline-offset:2px;
+  }
+
+  .actions-row{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:10px;flex-wrap:wrap;}
+
+  /* Start screen */
+  .start-hero{text-align:center;padding:10px 0 6px;}
+  .start-hero .emoji{font-size:44px;}
+  .tendency-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px;}
+  .tendency-chip{
+    background:var(--panel-soft);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;font-size:12.5px;color:var(--muted);
+  }
+
+  /* Chapter 1: scenario choices */
+  .choice-list{display:grid;gap:12px;margin-top:18px;}
+  .choice-card{
+    background:var(--panel-soft);border:1px solid var(--border);border-radius:16px;padding:16px 18px;
+    cursor:pointer;transition:.2s;
+  }
+  .choice-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .choice-card.selected{border-color:var(--accent);background:rgba(108,126,225,0.08);}
+
+  /* Chapter 2: draggable priority cards */
+  .dnd-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;}
+  @media(max-width:700px){.dnd-columns{grid-template-columns:1fr;}}
+  .dnd-col{
+    background:var(--panel-soft);border:2px dashed var(--border);border-radius:16px;padding:14px;min-height:240px;transition:.2s;
+  }
+  .dnd-col.dragover{border-color:var(--accent);background:rgba(108,126,225,0.06);}
+  .dnd-col h4{margin:0 0 10px;font-size:12.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+  .drag-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;
+    cursor:grab;font-size:13.5px;line-height:1.4;transition:.15s;user-select:none;
+  }
+  .drag-card:hover{transform:translateY(-2px);border-color:var(--accent);}
+  .drag-card.dragging{opacity:.4;}
+  .drag-card .rank-badge{
+    display:inline-block;background:var(--grad);color:#fff;border-radius:999px;
+    width:20px;height:20px;text-align:center;line-height:20px;font-size:11px;margin-right:8px;font-weight:700;
+  }
+
+  /* Chapter 3: timeline mapping */
+  .timeline-wrap{margin-top:18px;}
+  .timeline-track{
+    display:flex;gap:10px;background:var(--panel-soft);border:1px solid var(--border);border-radius:16px;
+    padding:16px;overflow-x:auto;
+  }
+  .timeline-slot{
+    flex:1;min-width:120px;background:var(--panel);border:2px dashed var(--border);border-radius:12px;
+    padding:10px;min-height:120px;text-align:center;transition:.2s;
+  }
+  .timeline-slot.dragover{border-color:var(--accent);background:rgba(108,126,225,0.06);}
+  .timeline-slot .slot-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;}
+  .timeline-pool{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+
+  /* journal / results */
+  .journal-header{text-align:center;padding:20px 10px;background:var(--grad);border-radius:18px;color:#fff;margin-bottom:22px;}
+  .journal-header h2{color:#fff;margin:0 0 6px;}
+  .breakdown{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+  .bar-row{display:flex;align-items:center;gap:12px;}
+  .bar-row .lab{width:170px;font-size:13px;color:var(--muted);}
+  .bar-track{flex:1;height:12px;background:var(--panel-soft);border:1px solid var(--border);border-radius:999px;overflow:hidden;}
+  .bar-fill{height:100%;background:var(--grad);border-radius:999px;width:0;transition:width 1.1s ease;}
+  .bar-pct{width:42px;text-align:right;font-size:12.5px;color:var(--muted);}
+  .insight-box{
+    background:var(--panel-soft);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:20px;font-size:14.5px;line-height:1.7;
+  }
+  .insight-box b{color:var(--text);}
+  .journal-note{margin-top:18px;}
+  textarea{
+    width:100%;min-height:100px;border-radius:14px;border:1px solid var(--border);background:var(--panel-soft);
+    color:var(--text);font-family:inherit;font-size:13.5px;padding:14px;resize:vertical;
+  }
+  textarea:focus-visible{outline:3px solid var(--accent);}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  .fade-in{animation:cardIn var(--dur) ease;}
+  #liveRegion{position:absolute;width:1px;height:1px;overflow:hidden;}
+</style>
+</head>
+<body data-mode="calm">
+<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div id="app"></div>
+<div id="liveRegion" aria-live="polite"></div>
+
+<script>
+(function(){
+
+/* ============================ DATA ============================ */
+const TENDENCIES = ["analytical","emotional","overthinking","action","balanced"];
+const TENDENCY_META = {
+  analytical:{ name:"Analytical Thinker", desc:"You tend to break things down logically, weigh evidence, and look for structure before deciding." },
+  emotional:{ name:"Emotional Intuitive", desc:"You often lead with felt sense and values, sensing what feels right before analyzing why." },
+  overthinking:{ name:"Overthinking Loop Style", desc:"You often revisit decisions from multiple angles, sometimes circling the same question more than once." },
+  action:{ name:"Action-First Decision Maker", desc:"You tend to move quickly into action, learning by doing rather than deliberating at length." },
+  balanced:{ name:"Balanced Reflective Thinker", desc:"You often blend logic and feeling, pausing briefly to reflect before choosing a path." }
+};
+
+// Chapter 1 scenarios: each option maps to one or more tendencies with weight
+const CHAPTER1_SCENARIOS = [
+  {
+    id:"c1s1",
+    prompt:"You're handed a project with an unclear deadline. What's your first move?",
+    options:[
+      { text:"List out what's known and unknown, then build a step-by-step plan.", weights:{analytical:3} },
+      { text:"Check in with how the team feels about it before deciding anything.", weights:{emotional:3} },
+      { text:"Start turning the idea over in your head from every possible angle.", weights:{overthinking:3} },
+      { text:"Just start working on the first obvious piece right away.", weights:{action:3} },
+      { text:"Take a moment to consider a few options, then pick a reasonable starting point.", weights:{balanced:3} }
+    ]
+  },
+  {
+    id:"c1s2",
+    prompt:"A friend asks for advice on a tough choice. How do you usually respond?",
+    options:[
+      { text:"Ask clarifying questions and lay out the pros and cons.", weights:{analytical:3} },
+      { text:"Ask how it feels in their gut, and validate that first.", weights:{emotional:3} },
+      { text:"Explore every possible outcome with them, sometimes for a long while.", weights:{overthinking:3} },
+      { text:"Suggest they just try one option and see what happens.", weights:{action:3} },
+      { text:"Offer a mix of practical points and emotional support.", weights:{balanced:3} }
+    ]
+  },
+  {
+    id:"c1s3",
+    prompt:"You made a small mistake at work. What happens next in your mind?",
+    options:[
+      { text:"You analyze exactly what went wrong and how to prevent it.", weights:{analytical:3} },
+      { text:"You notice how you feel about it before thinking it through.", weights:{emotional:3} },
+      { text:"You replay the moment repeatedly, wondering what people think.", weights:{overthinking:3} },
+      { text:"You quickly fix it and move on to the next task.", weights:{action:3} },
+      { text:"You note the lesson, feel it briefly, and move forward calmly.", weights:{balanced:3} }
+    ]
+  },
+  {
+    id:"c1s4",
+    prompt:"You're choosing between two paths with no clear right answer. What do you notice?",
+    options:[
+      { text:"You want more data before committing to either one.", weights:{analytical:2, overthinking:1} },
+      { text:"One option just feels more 'you,' even if you can't fully explain why.", weights:{emotional:3} },
+      { text:"You keep going back and forth, unsure if you'll ever feel sure.", weights:{overthinking:3} },
+      { text:"You pick one and trust you can adjust course later if needed.", weights:{action:3} },
+      { text:"You weigh both, sit with it briefly, then choose without much drama.", weights:{balanced:3} }
+    ]
+  }
+];
+
+// Chapter 2 priority cards (drag to rank / categorize)
+const PRIORITY_CARDS = [
+  { id:"p1", text:"Having a clear plan before starting", weights:{analytical:2} },
+  { id:"p2", text:"Feeling good about a decision, not just thinking it's right", weights:{emotional:2} },
+  { id:"p3", text:"Making sure I've considered every angle, even if it takes a while", weights:{overthinking:2} },
+  { id:"p4", text:"Getting moving quickly so I can learn as I go", weights:{action:2} },
+  { id:"p5", text:"Finding a reasonable balance without over-deliberating", weights:{balanced:2} },
+  { id:"p6", text:"Double-checking my reasoning multiple times before trusting it", weights:{overthinking:1, analytical:1} }
+];
+
+// Chapter 3 timeline items: user places into stages of a decision
+const TIMELINE_ITEMS = [
+  { id:"t1", text:"Gather all relevant facts and data", weights:{analytical:2} },
+  { id:"t2", text:"Notice my gut reaction first", weights:{emotional:2} },
+  { id:"t3", text:"Replay the decision in my head afterward", weights:{overthinking:2} },
+  { id:"t4", text:"Take the first reasonable action available", weights:{action:2} },
+  { id:"t5", text:"Pause briefly, then commit", weights:{balanced:2} },
+  { id:"t6", text:"Ask how others might feel about it", weights:{emotional:1, balanced:1} }
+];
+const TIMELINE_STAGES = ["Before Deciding","While Deciding","After Deciding"];
+
+/* ============================ STATE ============================ */
+let state = {
+  screen:"start",
+  mode:"calm",
+  chapter1Answers:{},      // scenarioId -> chosen option weights
+  priorityOrder:[],        // ranked card ids (chapter 2)
+  timelinePlacements:{},   // itemId -> stage index
+  reducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  journalNote:""
+};
+
+const SCREENS = ["start","ch1","ch2","ch3","journal"];
+
+function scoreTotals(){
+  const totals = {analytical:0, emotional:0, overthinking:0, action:0, balanced:0};
+  // chapter 1
+  Object.values(state.chapter1Answers).forEach(w=>{
+    Object.entries(w).forEach(([k,v])=> totals[k]+=v);
+  });
+  // chapter 2: earlier rank = higher weight
+  state.priorityOrder.forEach((id,idx)=>{
+    const card = PRIORITY_CARDS.find(c=>c.id===id);
+    if(!card) return;
+    const rankBonus = Math.max(1, PRIORITY_CARDS.length - idx); // higher for top ranks
+    Object.entries(card.weights).forEach(([k,v])=> totals[k]+= v*(rankBonus/PRIORITY_CARDS.length));
+  });
+  // chapter 3: items placed in "While Deciding" or any stage all count same weight for simplicity,
+  // but items placed in "Before Deciding" reflect deliberate pre-thought (slightly boost analytical/balanced),
+  // "After Deciding" boosts overthinking/emotional reflection style
+  Object.entries(state.timelinePlacements).forEach(([itemId, stageIdx])=>{
+    const item = TIMELINE_ITEMS.find(t=>t.id===itemId);
+    if(!item) return;
+    let mult = 1;
+    if(stageIdx===2) mult = 1.15; // after deciding -> slight overthinking/emotional emphasis retained naturally by weights
+    Object.entries(item.weights).forEach(([k,v])=> totals[k]+= v*mult);
+  });
+  return totals;
+}
+
+function percentBreakdown(){
+  const totals = scoreTotals();
+  const sum = Object.values(totals).reduce((a,b)=>a+b,0) || 1;
+  const pct = {};
+  TENDENCIES.forEach(t=> pct[t] = Math.round((totals[t]/sum)*100));
+  // normalize rounding so it sums close to 100
+  return pct;
+}
+
+/* ============================ UTIL ============================ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+function announce(msg){
+  const el = document.getElementById("liveRegion");
+  if(el) el.textContent = msg;
+}
+
+/* ============================ RENDER ============================ */
+function render(){
+  document.body.setAttribute("data-mode", state.mode);
+  document.body.classList.toggle("reduced-motion", state.reducedMotion);
+  const app = document.getElementById("app");
+  app.innerHTML = renderTop() + renderProgress() + renderScreen();
+  attachHandlers();
+}
+
+function renderTop(){
+  return `
+  <div class="top">
+    <div class="brand">
+      <div class="logo">🧭</div>
+      <div>
+        <h1>Cognitive Pattern Explorer</h1>
+        <span>A calm, reflective look at how you think</span>
+      </div>
+    </div>
+    <div class="mode-toggle" role="group" aria-label="Ambient mode">
+      <button id="modeCalm" class="${state.mode==='calm'?'active':''}" aria-pressed="${state.mode==='calm'}">🌿 Calm</button>
+      <button id="modeStress" class="${state.mode==='stress'?'active':''}" aria-pressed="${state.mode==='stress'}">🔥 Stress</button>
+    </div>
+  </div>`;
+}
+
+function renderProgress(){
+  if(state.screen==="start") return "";
+  const idx = SCREENS.indexOf(state.screen);
+  const pct = Math.round((idx/(SCREENS.length-1))*100);
+  const labelMap = {ch1:"Chapter 1 · Discover", ch2:"Chapter 2 · Priorities", ch3:"Chapter 3 · Timeline", journal:"Reflection Journal"};
+  return `
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="steps-row"><span>${labelMap[state.screen]||''}</span><span>${pct}% through the journey</span></div>
+  </div>`;
+}
+
+function renderScreen(){
+  if(state.screen==="start") return renderStart();
+  if(state.screen==="ch1") return renderChapter1();
+  if(state.screen==="ch2") return renderChapter2();
+  if(state.screen==="ch3") return renderChapter3();
+  if(state.screen==="journal") return renderJournal();
+  return "";
+}
+
+/* ---------- Start Screen ---------- */
+function renderStart(){
+  return `
+  <div class="card fade-in start-hero">
+    <div class="emoji">🧭</div>
+    <h2>Welcome to your Cognitive Pattern Explorer</h2>
+    <p class="lede">This is a gentle, exploratory journey through how you tend to think and decide — not a test, and not a diagnosis. There are no right answers.</p>
+    <p class="muted" style="font-size:13px;">Choose an ambient mode above, then begin whenever you're ready.</p>
+    <div class="tendency-preview">
+      ${TENDENCIES.map(t=>`<div class="tendency-chip"><b>${TENDENCY_META[t].name}</b></div>`).join("")}
+    </div>
+    <div class="actions-row" style="justify-content:center;margin-top:28px;">
+      <button class="primary" id="beginBtn">Begin the Journey →</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Chapter 1 ---------- */
+function renderChapter1(){
+  const answeredCount = Object.keys(state.chapter1Answers).length;
+  const scenario = CHAPTER1_SCENARIOS[answeredCount] || null;
+  if(!scenario){
+    return `
+    <div class="card fade-in">
+      <h2>Chapter 1 Complete</h2>
+      <p>You've explored a few everyday moments. Let's continue to see how you prioritize.</p>
+      <div class="actions-row">
+        <span></span>
+        <button class="primary" id="toCh2Btn">Continue to Chapter 2 →</button>
+      </div>
+    </div>`;
+  }
+  return `
+  <div class="card fade-in">
+    <h3 class="muted" style="text-transform:uppercase;letter-spacing:.5px;font-size:12px;">Chapter 1 · Discover Your Thinking Style (${answeredCount+1}/${CHAPTER1_SCENARIOS.length})</h3>
+    <h2>${escapeHtml(scenario.prompt)}</h2>
+    <div class="choice-list" role="radiogroup" aria-label="Scenario options">
+      ${scenario.options.map((o,i)=>`
+        <div class="choice-card" tabindex="0" role="radio" aria-checked="false" data-idx="${i}">
+          ${escapeHtml(o.text)}
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+/* ---------- Chapter 2 ---------- */
+function ensureCh2Init(){
+  if(state.priorityOrder.length === 0){
+    state.ch2Pool = shuffle(PRIORITY_CARDS.map(c=>c.id));
+    state.priorityOrder = [];
+  }
+}
+function renderChapter2(){
+  if(!state.ch2Pool) ensureCh2Init();
+  const poolIds = state.ch2Pool.filter(id=>!state.priorityOrder.includes(id));
+  const poolHtml = poolIds.map(id=>{
+    const card = PRIORITY_CARDS.find(c=>c.id===id);
+    return `<div class="drag-card" draggable="true" tabindex="0" data-id="${id}">${escapeHtml(card.text)}</div>`;
+  }).join("");
+  const rankedHtml = state.priorityOrder.map((id,i)=>{
+    const card = PRIORITY_CARDS.find(c=>c.id===id);
+    return `<div class="drag-card" draggable="false" data-id="${id}"><span class="rank-badge">${i+1}</span>${escapeHtml(card.text)}</div>`;
+  }).join("");
+  const canContinue = poolIds.length===0;
+  return `
+  <div class="card fade-in">
+    <h3 class="muted" style="text-transform:uppercase;letter-spacing:.5px;font-size:12px;">Chapter 2 · Choose Your Priorities</h3>
+    <h2>Drag these into order — most true for you at the top.</h2>
+    <p class="lede">There's no wrong order. Go with what feels most accurate right now.</p>
+    <div class="dnd-columns">
+      <div class="dnd-col" id="ch2Pool"><h4>Unranked</h4>${poolHtml || '<p class="muted" style="font-size:12px;">All placed — nice work.</p>'}</div>
+      <div class="dnd-col" id="ch2Ranked"><h4>Your Order (top = most true)</h4>${rankedHtml || '<p class="muted" style="font-size:12px;">Drag cards here to rank them...</p>'}</div>
+    </div>
+    <div class="actions-row">
+      <span class="muted" style="font-size:12.5px;">${poolIds.length} card${poolIds.length===1?'':'s'} remaining</span>
+      <button class="primary" id="toCh3Btn" ${canContinue?'':'disabled'}>Continue to Chapter 3 →</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Chapter 3 ---------- */
+function ensureCh3Init(){
+  if(!state.ch3Pool){
+    state.ch3Pool = shuffle(TIMELINE_ITEMS.map(t=>t.id));
+  }
+}
+function renderChapter3(){
+  ensureCh3Init();
+  const placedIds = Object.keys(state.timelinePlacements);
+  const poolIds = state.ch3Pool.filter(id=>!placedIds.includes(id));
+  const poolHtml = poolIds.map(id=>{
+    const item = TIMELINE_ITEMS.find(t=>t.id===id);
+    return `<div class="drag-card" draggable="true" tabindex="0" data-id="${id}">${escapeHtml(item.text)}</div>`;
+  }).join("");
+
+  const stagesHtml = TIMELINE_STAGES.map((label, sIdx)=>{
+    const itemsInStage = Object.entries(state.timelinePlacements).filter(([id,s])=>s===sIdx).map(([id])=>id);
+    const itemsHtml = itemsInStage.map(id=>{
+      const item = TIMELINE_ITEMS.find(t=>t.id===id);
+      return `<div class="drag-card" draggable="false" data-id="${id}" style="text-align:left;">${escapeHtml(item.text)}</div>`;
+    }).join("");
+    return `
+    <div class="timeline-slot" data-stage="${sIdx}">
+      <div class="slot-label">${label}</div>
+      ${itemsHtml}
+    </div>`;
+  }).join("");
+
+  const canContinue = poolIds.length===0;
+  return `
+  <div class="card fade-in">
+    <h3 class="muted" style="text-transform:uppercase;letter-spacing:.5px;font-size:12px;">Chapter 3 · Map Your Thinking</h3>
+    <h2>Place each thought pattern on the timeline of a decision.</h2>
+    <p class="lede">Where does each one usually show up for you — before, during, or after deciding?</p>
+    <div class="timeline-wrap">
+      <div class="timeline-track" id="timelineTrack">${stagesHtml}</div>
+      <div class="timeline-pool" id="timelinePool">${poolHtml}</div>
+    </div>
+    <div class="actions-row">
+      <span class="muted" style="font-size:12.5px;">${poolIds.length} item${poolIds.length===1?'':'s'} left to place</span>
+      <button class="primary" id="toJournalBtn" ${canContinue?'':'disabled'}>See My Reflection Journal →</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Journal / Results ---------- */
+function dominantTendency(pct){
+  return Object.entries(pct).sort((a,b)=>b[1]-a[1])[0][0];
+}
+function renderJournal(){
+  const pct = percentBreakdown();
+  const dominant = dominantTendency(pct);
+  const secondary = Object.entries(pct).sort((a,b)=>b[1]-a[1])[1][0];
+  return `
+  <div class="card fade-in">
+    <div class="journal-header">
+      <h2>Your Reflection Journal</h2>
+      <p style="margin:0;opacity:.9;">A gentle summary of the patterns you leaned toward today.</p>
+    </div>
+
+    <h3>Your Thinking Pattern Breakdown</h3>
+    <div class="breakdown">
+      ${TENDENCIES.map(t=>`
+        <div class="bar-row">
+          <div class="lab">${TENDENCY_META[t].name}</div>
+          <div class="bar-track"><div class="bar-fill" data-target="${pct[t]}" style="width:0%"></div></div>
+          <div class="bar-pct">${pct[t]}%</div>
+        </div>`).join("")}
+    </div>
+
+    <div class="insight-box">
+      <p><b>What this suggests:</b> Today, you leaned most toward <b>${TENDENCY_META[dominant].name}</b> (${pct[dominant]}%). ${TENDENCY_META[dominant].desc}</p>
+      <p>You also showed some <b>${TENDENCY_META[secondary].name}</b> tendencies (${pct[secondary]}%) — it's common to move between styles depending on the situation.</p>
+      <p class="muted" style="font-size:12.5px;margin-bottom:0;">This is a reflective exploration, not a clinical assessment. Thinking patterns shift with context, mood, and rest — treat this as one snapshot, not a fixed label.</p>
+    </div>
+
+    <div class="journal-note">
+      <h3>A note to your future self</h3>
+      <label class="sr-only" for="journalText">Write a short reflection</label>
+      <textarea id="journalText" placeholder="What did you notice about how you think while going through this? (optional, saved only on this screen)">${escapeHtml(state.journalNote)}</textarea>
+    </div>
+
+    <div class="actions-row">
+      <button class="secondary" id="restartBtn">🔄 Start a New Exploration</button>
+      <span class="muted" style="font-size:12px;">Thank you for taking a moment to reflect.</span>
+    </div>
+  </div>`;
+}
+
+/* ============================ HANDLERS ============================ */
+function attachHandlers(){
+  document.getElementById("modeCalm").addEventListener("click", ()=>{ state.mode="calm"; render(); });
+  document.getElementById("modeStress").addEventListener("click", ()=>{ state.mode="stress"; render(); });
+
+  if(state.screen==="start"){
+    document.getElementById("beginBtn").addEventListener("click", ()=>{ state.screen="ch1"; render(); announce("Chapter 1 started"); });
+  }
+  else if(state.screen==="ch1"){
+    attachChapter1Handlers();
+  }
+  else if(state.screen==="ch2"){
+    attachChapter2Handlers();
+  }
+  else if(state.screen==="ch3"){
+    attachChapter3Handlers();
+  }
+  else if(state.screen==="journal"){
+    attachJournalHandlers();
+    requestAnimationFrame(()=>{
+      document.querySelectorAll(".bar-fill").forEach(el=>{
+        const target = el.getAttribute("data-target");
+        requestAnimationFrame(()=> el.style.width = target+"%");
+      });
+    });
+  }
+}
+
+/* ---- Chapter 1 handlers ---- */
+function attachChapter1Handlers(){
+  const btn = document.getElementById("toCh2Btn");
+  if(btn){ btn.addEventListener("click", ()=>{ state.screen="ch2"; render(); announce("Chapter 2 started"); }); return; }
+
+  const answeredCount = Object.keys(state.chapter1Answers).length;
+  const scenario = CHAPTER1_SCENARIOS[answeredCount];
+  document.querySelectorAll(".choice-card").forEach(el=>{
+    const select = ()=>{
+      const idx = parseInt(el.dataset.idx,10);
+      const option = scenario.options[idx];
+      state.chapter1Answers[scenario.id] = option.weights;
+      announce("Choice recorded");
+      render();
+    };
+    el.addEventListener("click", select);
+    el.addEventListener("keydown", e=>{
+      if(e.key==="Enter" || e.key===" "){ e.preventDefault(); select(); }
+    });
+  });
+}
+
+/* ---- Chapter 2 handlers (drag + touch + keyboard) ---- */
+function attachChapter2Handlers(){
+  const contBtn = document.getElementById("toCh3Btn");
+  if(contBtn) contBtn.addEventListener("click", ()=>{ if(!contBtn.disabled){ state.screen="ch3"; render(); announce("Chapter 3 started"); } });
+
+  const poolZone = document.getElementById("ch2Pool");
+  const rankedZone = document.getElementById("ch2Ranked");
+  setupDragDrop({
+    cards: document.querySelectorAll("#ch2Pool .drag-card"),
+    zones: [poolZone, rankedZone],
+    onDropToZone: (id, zoneEl)=>{
+      if(zoneEl===rankedZone && !state.priorityOrder.includes(id)){
+        state.priorityOrder.push(id);
+        announce("Card ranked");
+        render();
+      }
+    },
+    onKeyActivate: (id)=>{
+      if(!state.priorityOrder.includes(id)){
+        state.priorityOrder.push(id);
+        announce("Card added to your order");
+        render();
+      }
+    }
+  });
+}
+
+/* ---- Chapter 3 handlers ---- */
+function attachChapter3Handlers(){
+  const contBtn = document.getElementById("toJournalBtn");
+  if(contBtn) contBtn.addEventListener("click", ()=>{ if(!contBtn.disabled){ state.screen="journal"; render(); announce("Reflection journal ready"); } });
+
+  const poolZone = document.getElementById("timelinePool");
+  const slots = Array.from(document.querySelectorAll(".timeline-slot"));
+  setupDragDrop({
+    cards: document.querySelectorAll("#timelinePool .drag-card"),
+    zones: [poolZone, ...slots],
+    onDropToZone: (id, zoneEl)=>{
+      if(zoneEl.classList.contains("timeline-slot")){
+        const stageIdx = parseInt(zoneEl.dataset.stage,10);
+        state.timelinePlacements[id] = stageIdx;
+        announce("Item placed on timeline");
+        render();
+      }
+    },
+    onKeyActivate: (id)=>{
+      // keyboard fallback: place into first stage ("Before Deciding") by default cycle
+      const current = state.timelinePlacements[id];
+      const next = current===undefined ? 0 : (current+1)%TIMELINE_STAGES.length;
+      state.timelinePlacements[id] = next;
+      announce("Item placed in " + TIMELINE_STAGES[next]);
+      render();
+    }
+  });
+}
+
+/* ---- Journal handlers ---- */
+function attachJournalHandlers(){
+  document.getElementById("journalText").addEventListener("input", e=>{
+    state.journalNote = e.target.value;
+  });
+  document.getElementById("restartBtn").addEventListener("click", ()=>{
+    const keepMode = state.mode;
+    state = {
+      screen:"start", mode:keepMode, chapter1Answers:{}, priorityOrder:[],
+      timelinePlacements:{}, reducedMotion: state.reducedMotion, journalNote:""
+    };
+    render();
+    announce("New exploration started");
+  });
+}
+
+/* ============================ REUSABLE DRAG & DROP ============================ */
+// Supports native HTML5 drag-and-drop (desktop) + touch fallback (mobile) + keyboard (Enter/Space to activate)
+function setupDragDrop({cards, zones, onDropToZone, onKeyActivate}){
+  let draggedId = null;
+
+  cards.forEach(card=>{
+    const id = card.dataset.id;
+
+    card.addEventListener("dragstart", e=>{
+      draggedId = id;
+      card.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", id);
+      e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("dragend", ()=> card.classList.remove("dragging"));
+
+    // keyboard accessibility: Enter/Space activates default placement
+    card.addEventListener("keydown", e=>{
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        onKeyActivate(id);
+      }
+    });
+
+    // touch fallback
+    let touchStartX=0, touchStartY=0, touchDragging=false;
+    card.addEventListener("touchstart", e=>{
+      const t = e.touches[0];
+      touchStartX=t.clientX; touchStartY=t.clientY; touchDragging=false;
+    }, {passive:true});
+    card.addEventListener("touchmove", e=>{
+      touchDragging = true;
+    }, {passive:true});
+    card.addEventListener("touchend", e=>{
+      if(!touchDragging) return;
+      const t = e.changedTouches[0];
+      const elAtPoint = document.elementFromPoint(t.clientX, t.clientY);
+      const zone = elAtPoint ? elAtPoint.closest(".dnd-col, .timeline-slot") : null;
+      if(zone && zones.includes(zone)){
+        onDropToZone(id, zone);
+      }
+    });
+  });
+
+  zones.forEach(zone=>{
+    zone.addEventListener("dragover", e=>{ e.preventDefault(); zone.classList.add("dragover"); });
+    zone.addEventListener("dragleave", ()=> zone.classList.remove("dragover"));
+    zone.addEventListener("drop", e=>{
+      e.preventDefault();
+      zone.classList.remove("dragover");
+      const id = e.dataTransfer.getData("text/plain") || draggedId;
+      if(id) onDropToZone(id, zone);
+      draggedId = null;
+    });
+  });
+}
+
+/* ============================ REDUCED MOTION LISTENER ============================ */
+if(window.matchMedia){
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  mq.addEventListener && mq.addEventListener('change', e=>{ state.reducedMotion = e.matches; render(); });
+}
+
+/* ============================ BOOT ============================ */
+render();
+
+})();
+</script>
+</body>
+</html>
