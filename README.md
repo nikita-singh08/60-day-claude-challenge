@@ -263,3 +263,10 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Explored everyday scenarios, drag-and-drop activities, and thinking sequences in Calm and Stress modes.
 - Reviewed the personalized Reflection Journal and compared thinking tendencies across different chapters.
 - Replayed the experience in the opposite mode to observe changes in responses and thinking patterns.
+
+## Day 37 – Task Compass
+
+- Built an interactive Task Compass application using Claude AI.
+- Explored task ownership, task routing, and collaboration challenges across different workplace scenarios.
+- Reviewed the Organizational Thinking Dashboard to evaluate task management and decision-making.
+- Replayed the experience using another workplace type to compare organizational approaches.
