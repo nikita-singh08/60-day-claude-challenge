@@ -270,3 +270,12 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Explored task ownership, task routing, and collaboration challenges across different workplace scenarios.
 - Reviewed the Organizational Thinking Dashboard to evaluate task management and decision-making.
 - Replayed the experience using another workplace type to compare organizational approaches.
+
+## Day 38 – Typing Speed Studio
+
+- Built an interactive Typing Speed Studio using Claude AI.
+- Answered Claude's interview questions and generated a complete HTML application.
+- Tested multiple typing modes and completed several typing sessions.
+- Reviewed typing speed, accuracy, and performance analytics.
+- Explored the analytics dashboard to understand typing performance.
+- Learned how interactive applications can combine real-time user input with performance tracking and analytics.
