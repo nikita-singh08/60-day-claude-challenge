@@ -279,3 +279,14 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Reviewed typing speed, accuracy, and performance analytics.
 - Explored the analytics dashboard to understand typing performance.
 - Learned how interactive applications can combine real-time user input with performance tracking and analytics.
+
+## Day 39 – PDF Splitter & Merger
+
+- Built an interactive PDF Splitter & Merger application using Claude AI.
+- Generated a complete browser-based HTML application for PDF processing.
+- Tested the PDF Splitter functionality.
+- Tested the PDF Merger functionality.
+- Previewed processed PDF files before downloading.
+- Downloaded the processed PDF files.
+- Learned how AI can be used to build practical document-processing and productivity tools.
+- Explored browser-based file handling and PDF processing workflows.
