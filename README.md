@@ -301,3 +301,11 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Explored the documentation panel and learned how the assistant configuration works.
 - Published the Claude artifact to test the assistant inside Claude without directly configuring an Anthropic API key.
 - Captured screenshots of the assistant, system prompt, and documentation.
+
+## Day 41 – Interactive Learning Studio
+
+- Built an AI-powered Interactive Learning Studio using Claude AI.
+- Completed four learning modules and their quizzes.
+- Completed the final practical challenge.
+- Tested the application locally and reviewed the results.
+- Captured screenshots and documented key learnings.

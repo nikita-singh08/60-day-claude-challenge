@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Learning Studio — Arrays & Hashing</title>
+<style>
+:root{
+  --bg:#0F1220;
+  --surface:#171B2E;
+  --surface-2:#1E2338;
+  --border:#2A2F48;
+  --text:#EDEEF5;
+  --muted:#9195AE;
+  --amber:#F5A623;
+  --amber-dim:#F5A62333;
+  --violet:#7C6FF0;
+  --violet-dim:#7C6FF033;
+  --green:#4ADE80;
+  --red:#F87171;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+  --radius: 10px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(circle at 15% 0%, #1a1f38 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, #241a3a 0%, transparent 40%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.6;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+::selection{background:var(--amber); color:#1a1200;}
+a{color:var(--amber);}
+button{font-family:inherit; cursor:pointer;}
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--violet); outline-offset:2px;
+}
+
+/* ---------- Top progress bar ---------- */
+#top-progress{
+  position:fixed; top:0; left:0; right:0; height:4px; background:var(--surface); z-index:1000;
+}
+#top-progress-fill{
+  height:100%; width:0%; background:linear-gradient(90deg,var(--amber),var(--violet));
+  transition:width .4s ease;
+}
+
+/* ---------- Header / nav ---------- */
+header{
+  max-width:1100px; margin:0 auto; padding:28px 24px 10px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand-mark{
+  width:38px; height:38px; border-radius:8px;
+  background:linear-gradient(135deg,var(--amber),var(--violet));
+  display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:700; color:#0F1220;
+}
+.brand-text .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase;}
+.brand-text h1{font-size:17px; font-weight:600;}
+.header-actions{display:flex; gap:10px; align-items:center;}
+.pill-btn{
+  background:var(--surface); border:1px solid var(--border); color:var(--text);
+  padding:8px 14px; border-radius:999px; font-size:13px; display:flex; gap:6px; align-items:center;
+  transition:border-color .2s, transform .2s;
+}
+.pill-btn:hover{border-color:var(--amber); transform:translateY(-1px);}
+
+nav#module-nav{
+  max-width:1100px; margin:14px auto 0; padding:0 24px;
+  display:flex; gap:8px; overflow-x:auto; scrollbar-width:thin;
+}
+.nav-chip{
+  flex:none; font-family:var(--mono); font-size:12px; padding:8px 14px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface); color:var(--muted); white-space:nowrap;
+  display:flex; align-items:center; gap:8px; transition:all .2s;
+}
+.nav-chip .dot{width:7px; height:7px; border-radius:50%; background:var(--border);}
+.nav-chip.unlocked{color:var(--text); cursor:pointer;}
+.nav-chip.unlocked .dot{background:var(--violet);}
+.nav-chip.complete .dot{background:var(--green);}
+.nav-chip.locked{opacity:.45; cursor:not-allowed;}
+.nav-chip.active{border-color:var(--amber); color:var(--amber);}
+
+main{max-width:1100px; margin:0 auto; padding:0 24px;}
+section{padding:56px 0;}
+.section-border-top{border-top:1px solid var(--border);}
+
+/* ---------- Hero ---------- */
+.hero{padding-top:36px; padding-bottom:20px;}
+.hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+.hero-eyebrow{font-family:var(--mono); font-size:12px; color:var(--violet); letter-spacing:.14em; text-transform:uppercase; margin-bottom:14px;}
+.hero h2{font-size:clamp(30px,5vw,46px); font-weight:700; line-height:1.08; letter-spacing:-.01em; margin-bottom:18px;}
+.hero h2 span{color:var(--amber);}
+.hero p.lead{color:var(--muted); font-size:16px; max-width:52ch; margin-bottom:26px;}
+
+.meta-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px;}
+.meta-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px;
+}
+.meta-card .k{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;}
+.meta-card .v{font-size:14px; font-weight:600;}
+
+.cta-row{display:flex; gap:12px; flex-wrap:wrap;}
+.btn-primary{
+  background:linear-gradient(135deg,var(--amber),#f6b94f); color:#241800; font-weight:700;
+  padding:13px 24px; border-radius:8px; border:none; font-size:14px;
+  box-shadow:0 8px 24px -8px var(--amber-dim); transition:transform .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-secondary{
+  background:transparent; border:1px solid var(--border); color:var(--text);
+  padding:13px 22px; border-radius:8px; font-size:14px; transition:border-color .2s;
+}
+.btn-secondary:hover{border-color:var(--violet);}
+
+/* Signature visual: array morphing into hash buckets */
+.signature{
+  position:relative; height:340px; background:var(--surface); border:1px solid var(--border); border-radius:16px;
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+.signature svg{width:100%; height:100%;}
+.sig-caption{
+  position:absolute; bottom:10px; left:0; right:0; text-align:center; font-family:var(--mono); font-size:10.5px; color:var(--muted); letter-spacing:.06em;
+}
+
+/* objectives list */
+.obj-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; margin-top:10px;
+}
+.obj-card h3{font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--violet); font-family:var(--mono); margin-bottom:14px;}
+.obj-card ul{list-style:none;}
+.obj-card li{display:flex; gap:10px; padding:7px 0; font-size:14.5px; color:var(--text);}
+.obj-card li::before{content:"→"; color:var(--amber); font-family:var(--mono); flex:none;}
+
+/* reward strip */
+.reward-strip{
+  margin-top:26px; display:flex; align-items:center; gap:16px; background:linear-gradient(90deg,var(--violet-dim),transparent);
+  border:1px solid var(--border); border-left:3px solid var(--violet); border-radius:var(--radius); padding:16px 20px; flex-wrap:wrap;
+}
+.reward-strip .badge-icon{
+  width:42px; height:42px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:20px; flex:none;
+}
+.reward-strip .txt strong{display:block; font-size:14px;}
+.reward-strip .txt span{font-size:12.5px; color:var(--muted);}
+#xp-counter{margin-left:auto; font-family:var(--mono); font-size:13px; background:var(--surface-2); padding:8px 14px; border-radius:999px; border:1px solid var(--border);}
+
+/* ---------- Module ---------- */
+.module{display:none;}
+.module.active{display:block; animation:fadeIn .5s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+.module-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px; flex-wrap:wrap;}
+.module-tag{font-family:var(--mono); font-size:12px; color:var(--amber); border:1px solid var(--amber-dim); background:var(--amber-dim); padding:4px 10px; border-radius:6px;}
+.module h2{font-size:clamp(24px,3.4vw,32px); font-weight:700;}
+.module .sub{color:var(--muted); font-size:15px; margin:8px 0 30px; max-width:70ch;}
+
+.block{margin-bottom:34px;}
+.block h3{
+  font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--violet); font-family:var(--mono);
+  margin-bottom:14px; display:flex; align-items:center; gap:8px;
+}
+.block h3::before{content:""; width:16px; height:1px; background:var(--violet);}
+.prose p{color:#D3D6E6; font-size:15px; margin-bottom:12px;}
+.prose strong{color:var(--amber);}
+code, .code-inline{font-family:var(--mono); background:var(--surface-2); padding:2px 6px; border-radius:4px; font-size:13px; color:#FFD98E;}
+pre{
+  background:#0C0E19; border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;
+  overflow-x:auto; font-family:var(--mono); font-size:13px; line-height:1.65; margin:12px 0; color:#D8DAF0;
+}
+pre .cm{color:#6C7293;}
+pre .kw{color:#7C6FF0;}
+pre .fn{color:#F5A623;}
+pre .str{color:#4ADE80;}
+
+/* analogy box */
+.analogy{
+  background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--amber);
+  border-radius:var(--radius); padding:18px 20px; margin:16px 0; display:flex; gap:14px;
+}
+.analogy .ico{font-size:22px; flex:none;}
+.analogy .t{font-size:13px; font-weight:700; color:var(--amber); margin-bottom:4px; font-family:var(--mono);}
+.analogy p{font-size:14.5px; color:#D3D6E6;}
+
+/* diagram containers */
+.diagram{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px; margin:16px 0; display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.diagram svg{max-width:100%; height:auto;}
+.diagram .cap{font-family:var(--mono); font-size:11.5px; color:var(--muted); text-align:center;}
+
+/* comparison table */
+.cmp-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;}
+.cmp-table th, .cmp-table td{border:1px solid var(--border); padding:10px 14px; text-align:left;}
+.cmp-table th{background:var(--surface-2); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--violet);}
+.cmp-table td{background:var(--surface);}
+.cmp-table tr:hover td{background:var(--surface-2);}
+
+/* misconceptions */
+.misconception{
+  background:#2A1418; border:1px solid #4A2028; border-left:3px solid var(--red); border-radius:var(--radius);
+  padding:16px 18px; margin:12px 0;
+}
+.misconception .t{color:var(--red); font-weight:700; font-size:13px; margin-bottom:6px; font-family:var(--mono);}
+.misconception p{font-size:14px; color:#E6C9CC;}
+
+/* key takeaways */
+.takeaways{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px;}
+.takeaways ul{list-style:none;}
+.takeaways li{padding:6px 0; font-size:14.5px; display:flex; gap:10px;}
+.takeaways li::before{content:"✓"; color:var(--green); font-family:var(--mono);}
+
+/* exercise */
+.exercise{
+  background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin:16px 0;
+}
+.exercise .t{font-family:var(--mono); font-size:12.5px; color:var(--amber); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;}
+.exercise textarea{
+  width:100%; min-height:110px; background:#0C0E19; border:1px solid var(--border); border-radius:8px; color:var(--text);
+  font-family:var(--mono); font-size:13px; padding:12px; resize:vertical; margin:10px 0;
+}
+.exercise-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+.small-btn{
+  background:var(--surface); border:1px solid var(--border); color:var(--text); padding:8px 16px; border-radius:6px; font-size:13px;
+  transition:border-color .2s;
+}
+.small-btn:hover{border-color:var(--violet);}
+.exercise-feedback{font-size:13.5px; margin-top:8px; padding:10px 12px; border-radius:6px; display:none;}
+.exercise-feedback.show{display:block;}
+.exercise-feedback.ok{background:#12291D; border:1px solid #1F4A31; color:#8FE3AC;}
+.exercise-feedback.warn{background:#2A2313; border:1px solid #4A3E1F; color:#F0CE7E;}
+
+/* interactive widgets generic */
+.widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin:16px 0;}
+.widget .t{font-family:var(--mono); font-size:12.5px; color:var(--violet); text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px;}
+.arr-box-row{display:flex; gap:6px; flex-wrap:wrap; margin:14px 0;}
+.arr-cell{
+  width:52px; height:52px; border:1px solid var(--border); border-radius:6px; background:var(--surface-2);
+  display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:15px; position:relative;
+  transition:transform .25s, border-color .25s, background .25s;
+}
+.arr-cell .idx{position:absolute; bottom:-18px; font-size:10px; color:var(--muted);}
+.arr-cell.hit{border-color:var(--amber); background:var(--amber-dim); transform:translateY(-4px);}
+.arr-cell.active-scan{border-color:var(--violet); background:var(--violet-dim);}
+.hash-buckets{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0;}
+.bucket{
+  min-width:80px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2); padding:8px;
+  display:flex; flex-direction:column; gap:6px; align-items:center;
+}
+.bucket .idx{font-family:var(--mono); font-size:10px; color:var(--muted);}
+.bucket .item{background:var(--violet-dim); border:1px solid var(--violet); border-radius:4px; padding:4px 8px; font-family:var(--mono); font-size:11.5px;}
+input[type=text].mini-input, input[type=number].mini-input{
+  background:#0C0E19; border:1px solid var(--border); color:var(--text); border-radius:6px; padding:8px 10px; font-family:var(--mono); font-size:13px;
+}
+
+/* Quiz */
+.quiz{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; margin-top:20px;
+}
+.quiz-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:10px;}
+.quiz-head h3{font-size:19px;}
+.quiz-progress-label{font-family:var(--mono); font-size:12px; color:var(--muted);}
+.q-block{display:none; padding-top:18px; border-top:1px solid var(--border); margin-top:18px;}
+.q-block.show{display:block;}
+.q-prompt{font-size:15.5px; font-weight:600; margin-bottom:14px;}
+.q-options{display:flex; flex-direction:column; gap:10px;}
+.q-option{
+  text-align:left; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:12px 16px; font-size:14px; color:var(--text);
+  transition:all .15s;
+}
+.q-option:hover:not(:disabled){border-color:var(--violet);}
+.q-option.correct{border-color:var(--green); background:#12291D; color:#8FE3AC;}
+.q-option.incorrect{border-color:var(--red); background:#2A1418; color:#F3A8AC;}
+.q-option:disabled{cursor:default;}
+.q-explain{
+  margin-top:12px; font-size:13.5px; color:var(--muted); background:var(--surface-2); border-radius:8px; padding:12px 14px; display:none;
+}
+.q-explain.show{display:block;}
+.quiz-nav{display:flex; justify-content:flex-end; margin-top:18px;}
+.quiz-results{display:none; text-align:center; padding:20px 0;}
+.quiz-results.show{display:block;}
+.score-ring{width:120px; height:120px; margin:0 auto 16px; position:relative;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring .bg{fill:none; stroke:var(--surface-2); stroke-width:8;}
+.score-ring .fg{fill:none; stroke:var(--amber); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset 1s ease;}
+.score-ring .label{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:22px; font-weight:700;}
+.quiz-results h4{font-size:17px; margin-bottom:6px;}
+.quiz-results p{color:var(--muted); font-size:13.5px; margin-bottom:18px;}
+
+/* Final / closing */
+.final-hero{
+  background:linear-gradient(135deg, var(--violet-dim), transparent); border:1px solid var(--border); border-radius:16px; padding:32px;
+}
+.final-hero h2{font-size:26px; margin-bottom:10px;}
+.final-hero p{color:var(--muted); max-width:65ch;}
+
+.cheat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:16px;}
+@media (max-width:700px){.cheat-grid{grid-template-columns:1fr;}}
+.cheat-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px;}
+.cheat-card h4{font-family:var(--mono); font-size:13px; color:var(--amber); margin-bottom:10px; text-transform:uppercase; letter-spacing:.05em;}
+.cheat-card table{width:100%; font-size:13px; border-collapse:collapse;}
+.cheat-card td{padding:5px 0; border-bottom:1px dashed var(--border);}
+.cheat-card td:last-child{text-align:right; font-family:var(--mono); color:var(--violet);}
+
+.resource-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:14px;}
+@media (max-width:860px){.resource-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.resource-grid{grid-template-columns:1fr;}}
+.resource-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;}
+.resource-card h4{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--violet); margin-bottom:10px;}
+.resource-card ul{list-style:none; font-size:13.5px;}
+.resource-card li{padding:5px 0; color:#D3D6E6;}
+.kw-chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+.kw-chip{font-family:var(--mono); font-size:12px; background:var(--surface-2); border:1px solid var(--border); padding:5px 10px; border-radius:6px; color:var(--muted);}
+
+/* print notes */
+.print-panel{display:flex; gap:12px; align-items:center; margin-top:20px;}
+
+footer{
+  max-width:1100px; margin:60px auto 0; padding:24px; text-align:center; color:var(--muted); font-size:12.5px; border-top:1px solid var(--border);
+}
+
+/* toast */
+#toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0;
+  background:var(--surface-2); border:1px solid var(--violet); color:var(--text); padding:12px 20px; border-radius:999px;
+  font-size:13.5px; z-index:1000; transition:all .35s ease; display:flex; align-items:center; gap:8px; pointer-events:none;
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+@media print{
+  header, nav#module-nav, #top-progress, .cta-row, .exercise-actions, footer, #toast, .quiz-nav{display:none !important;}
+  body{background:#fff; color:#000;}
+  .module{display:block !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="top-progress"><div id="top-progress-fill"></div></div>
+<div id="toast"></div>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">[]</div>
+    <div class="brand-text">
+      <div class="eyebrow">Interactive Learning Studio</div>
+      <h1>Arrays &amp; Hashing — Fundamentals</h1>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="pill-btn" id="print-btn">🖨 Print notes</button>
+    <div class="pill-btn" id="xp-pill">⚡ 0 XP</div>
+  </div>
+</header>
+
+<nav id="module-nav">
+  <div class="nav-chip active unlocked" data-target="intro"><span class="dot"></span>Intro</div>
+  <div class="nav-chip unlocked" data-target="m1"><span class="dot"></span>M1 · Foundations</div>
+  <div class="nav-chip locked" data-target="m2"><span class="dot"></span>M2 · Hashing</div>
+  <div class="nav-chip locked" data-target="m3"><span class="dot"></span>M3 · Application</div>
+  <div class="nav-chip locked" data-target="m4"><span class="dot"></span>M4 · Mastery</div>
+  <div class="nav-chip locked" data-target="closing"><span class="dot"></span>Wrap-up</div>
+</nav>
+
+<main>
+
+<!-- ================= INTRO ================= -->
+<section id="intro" class="view active">
+  <div class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">Data Structures &amp; Algorithms</div>
+        <h2>Master <span>Arrays &amp; Hashing</span> — from memory layout to O(1) lookups.</h2>
+        <p class="lead">A complete, self-contained tutorial covering how arrays actually live in memory, how hash tables turn "search" into "lookup," and how to wield both to solve real interview and engineering problems.</p>
+
+        <div class="meta-grid">
+          <div class="meta-card"><div class="k">Estimated time</div><div class="v">60–75 minutes</div></div>
+          <div class="meta-card"><div class="k">Prerequisites</div><div class="v">Basic programming (variables, loops, functions)</div></div>
+          <div class="meta-card"><div class="k">Modules</div><div class="v">4 progressive modules + final challenge</div></div>
+          <div class="meta-card"><div class="k">Format</div><div class="v">Diagrams, exercises, 4 quizzes</div></div>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" id="start-btn">Start Module 1 →</button>
+          <button class="btn-secondary" id="scroll-objectives">View objectives</button>
+        </div>
+      </div>
+
+      <div class="signature">
+        <svg viewBox="0 0 360 340" id="hero-svg">
+          <!-- array row -->
+          <g id="hero-array">
+            <text x="10" y="24" fill="#9195AE" font-family="monospace" font-size="10">ARRAY (contiguous memory)</text>
+            <g id="hero-cells"></g>
+          </g>
+          <!-- arrow -->
+          <path d="M60,90 C120,120 240,120 300,90" stroke="#7C6FF0" stroke-width="2" fill="none" marker-end="url(#arrow)" stroke-dasharray="4 4"/>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#7C6FF0"/>
+            </marker>
+          </defs>
+          <text x="105" y="112" fill="#7C6FF0" font-family="monospace" font-size="10">hash(key) % N</text>
+          <!-- buckets -->
+          <text x="10" y="150" fill="#9195AE" font-family="monospace" font-size="10">HASH TABLE (buckets)</text>
+          <g id="hero-buckets"></g>
+          <text x="10" y="320" fill="#565C79" font-family="monospace" font-size="9.5">Same data. Two access strategies: by position, or by key.</text>
+        </svg>
+        <div class="sig-caption">Arrays → indexed memory · Hash tables → keyed buckets</div>
+      </div>
+    </div>
+
+    <div id="objectives-anchor"></div>
+    <div class="obj-card">
+      <h3>Learning objectives</h3>
+      <ul>
+        <li>Explain how arrays are stored and indexed in memory, and why indexing is O(1).</li>
+        <li>Compare static vs. dynamic arrays and reason about amortized time complexity.</li>
+        <li>Explain how a hash function converts keys into array positions.</li>
+        <li>Describe and implement two collision-resolution strategies: chaining and open addressing.</li>
+        <li>Recognize and apply core patterns: frequency counting, two-sum lookups, deduplication with sets.</li>
+        <li>Choose the right structure — array, hash map, or hash set — for a given problem.</li>
+      </ul>
+    </div>
+
+    <div class="reward-strip">
+      <div class="badge-icon">🏆</div>
+      <div class="txt">
+        <strong>Reward system</strong>
+        <span>Earn XP for exercises and quiz answers. Score 3/4+ on every quiz to unlock a "Hash Master" completion badge.</span>
+      </div>
+      <div id="xp-counter">0 XP · 0/4 modules complete</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODULE 1 ================= -->
+<section id="m1" class="view module">
+  <div class="module-head">
+    <span class="module-tag">Module 1 / 4</span>
+    <h2>Foundations — How Arrays Actually Work</h2>
+  </div>
+  <p class="sub">Before you can appreciate hashing, you need a rock-solid mental model of arrays: contiguous memory, index arithmetic, and why some operations are cheap while others are expensive.</p>
+
+  <div class="block prose">
+    <h3>Contiguous memory &amp; indexing</h3>
+    <p>An array is a block of <strong>contiguous memory</strong> — one unbroken strip of memory cells, each the same size. When you write <code>arr[i]</code>, the computer doesn't "search" for element <em>i</em>. It calculates an address directly: <code>address = base_address + (i * element_size)</code>. That's simple arithmetic, so it happens in constant time — <strong>O(1)</strong> — no matter how big the array is.</p>
+    <p>This is the single fact that explains almost everything else about arrays: fast random access, but expensive insertion/removal in the middle (because shifting elements means moving memory around).</p>
+  </div>
+
+  <div class="analogy">
+    <div class="ico">🏢</div>
+    <div>
+      <div class="t">Analogy: An apartment building</div>
+      <p>Think of an array as a straight hallway of same-sized apartments, numbered 0, 1, 2, 3... If you know the apartment number, you can walk straight to the door — no need to check every door along the way. But if you want to add a new apartment in the middle of the hallway, every apartment after it has to shift down the hall to make room. That's why <code>arr[i]</code> is instant, but <code>insert(i, value)</code> in the middle is slow.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Diagram: memory layout &amp; index arithmetic</h3>
+    <div class="diagram">
+      <svg viewBox="0 0 620 150" width="100%">
+        <text x="0" y="16" fill="#9195AE" font-family="monospace" font-size="11">base_address = 1000, element_size = 4 bytes</text>
+        <g id="mem-cells"></g>
+      </svg>
+      <div class="cap">arr[3] → 1000 + (3 × 4) = address 1012 — computed instantly, not searched.</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Interactive: index vs. address</h3>
+    <div class="widget">
+      <div class="t">Try it — compute an address</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:10px;">base = 1000, element size = 4 bytes. Enter an index (0–7):</p>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <input type="number" min="0" max="7" value="0" class="mini-input" id="addr-index" style="width:80px;">
+        <button class="small-btn" id="addr-calc">Compute address</button>
+        <span id="addr-result" style="font-family:var(--mono); font-size:14px; color:var(--amber);"></span>
+      </div>
+      <div class="arr-box-row" id="addr-row" style="margin-top:22px;"></div>
+    </div>
+  </div>
+
+  <div class="block prose">
+    <h3>Static vs. dynamic arrays</h3>
+    <p>A <strong>static array</strong> has a fixed size decided up front (common in C). A <strong>dynamic array</strong> — Python's <code>list</code>, JavaScript's <code>Array</code>, Java's <code>ArrayList</code> — can grow. Internally, it's still a fixed-size buffer, but when it fills up, it allocates a <em>new, larger</em> buffer (typically double the size) and copies everything over.</p>
+    <p>That resize is O(n), but it happens rarely — roughly every time the array doubles. Averaged out over many insertions, appending is <strong>O(1) amortized</strong>: cheap most of the time, occasionally expensive, but the expensive operations become rarer and rarer as the array grows.</p>
+  </div>
+
+  <div class="block">
+    <h3>Comparison: array operations</h3>
+    <table class="cmp-table">
+      <tr><th>Operation</th><th>Time complexity</th><th>Why</th></tr>
+      <tr><td>Access <code>arr[i]</code></td><td>O(1)</td><td>Direct address calculation</td></tr>
+      <tr><td>Append at end (dynamic array)</td><td>O(1) amortized</td><td>Occasional resize, spread over many ops</td></tr>
+      <tr><td>Insert/delete at start or middle</td><td>O(n)</td><td>Every later element must shift</td></tr>
+      <tr><td>Search for a value (unsorted)</td><td>O(n)</td><td>No shortcut — must check each element</td></tr>
+      <tr><td>Search for a value (sorted, binary search)</td><td>O(log n)</td><td>Halve the search space each step</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <h3>Practical exercise</h3>
+    <div class="exercise">
+      <div class="t">Exercise 1.1 — Predict the complexity</div>
+      <p style="font-size:14px;">You have an array of 1,000,000 integers. For each of the following, write down what you think the time complexity is and why: (a) reading <code>arr[999999]</code>, (b) inserting a new value at index 0, (c) appending one value at the end when there's spare capacity.</p>
+      <textarea placeholder="Type your reasoning here..." id="ex1-input"></textarea>
+      <div class="exercise-actions">
+        <button class="small-btn" id="ex1-check">Reveal model answer</button>
+      </div>
+      <div class="exercise-feedback ok" id="ex1-feedback">
+        <strong>Model answer:</strong> (a) O(1) — direct address math regardless of size. (b) O(n) — all 1,000,000 elements shift right by one. (c) O(1) amortized — no shifting needed, and resizing is rare.
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Common misconceptions</h3>
+    <div class="misconception">
+      <div class="t">⚠ "Arrays and lists are the same thing"</div>
+      <p>In many languages (Python, JS) the built-in "array" is actually a dynamic array with extra bookkeeping. A true fixed-size array and a resizable list behave differently under the hood, even if the syntax looks identical.</p>
+    </div>
+    <div class="misconception">
+      <div class="t">⚠ "Appending is always instant"</div>
+      <p>Appending is O(1) <em>on average</em>, but any individual append that triggers a resize is O(n) for that one call. This matters in real-time systems where a single slow operation can cause a visible stutter.</p>
+    </div>
+  </div>
+
+  <div class="block takeaways">
+    <h3>Key takeaways</h3>
+    <ul>
+      <li>Arrays store data contiguously, enabling O(1) index-based access via address arithmetic.</li>
+      <li>Insertion/deletion away from the end costs O(n) because elements must shift.</li>
+      <li>Dynamic arrays grow by reallocating and copying, giving O(1) amortized append.</li>
+      <li>Unsorted-array search is O(n); this limitation is exactly what hashing solves.</li>
+    </ul>
+  </div>
+
+  <div id="quiz-m1"></div>
+</section>
+
+<!-- ================= MODULE 2 ================= -->
+<section id="m2" class="view module">
+  <div class="module-head">
+    <span class="module-tag">Module 2 / 4</span>
+    <h2>Hashing Fundamentals — From Keys to Positions</h2>
+  </div>
+  <p class="sub">Arrays give O(1) access — but only if you already know the index. Hashing is the trick that lets you get O(1) access using a <em>meaningful key</em>, like a name or an ID, instead of a raw position number.</p>
+
+  <div class="block prose">
+    <h3>What a hash function does</h3>
+    <p>A <strong>hash function</strong> takes an arbitrary key (a string, number, object) and deterministically converts it into a number — a <em>hash code</em>. That number is then reduced with the modulo operator to fit inside the bounds of a backing array: <code>index = hash(key) % table_size</code>. The result is where the key-value pair gets stored.</p>
+    <p>A good hash function is <strong>deterministic</strong> (same key always produces the same hash), <strong>fast to compute</strong>, and <strong>uniform</strong> (spreads keys evenly across the table to minimize collisions).</p>
+  </div>
+
+  <div class="analogy">
+    <div class="ico">📚</div>
+    <div>
+      <div class="t">Analogy: A library's call-number system</div>
+      <p>Instead of searching every shelf for a book title, a library converts the subject into a call number (like a hash function) and tells you exactly which shelf to walk to. You don't scan the whole library — you compute where to go. That's a hash table: it trades "searching" for "computing an address."</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Diagram: from key to bucket</h3>
+    <div class="diagram">
+      <svg viewBox="0 0 640 190" width="100%">
+        <text x="10" y="20" font-family="monospace" font-size="11" fill="#9195AE">key = "cat"</text>
+        <rect x="10" y="34" width="90" height="34" rx="6" fill="#1E2338" stroke="#2A2F48"/>
+        <text x="55" y="56" text-anchor="middle" font-family="monospace" font-size="12" fill="#EDEEF5">"cat"</text>
+        <path d="M100,50 L180,50" stroke="#7C6FF0" stroke-width="2" marker-end="url(#a2)"/>
+        <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="#7C6FF0"/></marker></defs>
+        <rect x="185" y="30" width="130" height="42" rx="6" fill="#171B2E" stroke="#7C6FF0"/>
+        <text x="250" y="56" text-anchor="middle" font-family="monospace" font-size="11" fill="#7C6FF0">hash("cat") = 172</text>
+        <path d="M315,50 L395,50" stroke="#7C6FF0" stroke-width="2" marker-end="url(#a2)"/>
+        <rect x="400" y="30" width="120" height="42" rx="6" fill="#171B2E" stroke="#F5A623"/>
+        <text x="460" y="56" text-anchor="middle" font-family="monospace" font-size="11" fill="#F5A623">172 % 8 = 4</text>
+        <path d="M460,72 L460,110" stroke="#F5A623" stroke-width="2" marker-end="url(#a3)"/>
+        <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="#F5A623"/></marker></defs>
+        <g id="bucket-row-diagram"></g>
+      </svg>
+      <div class="cap">The key never touches most of the table — the hash sends it straight to bucket 4.</div>
+    </div>
+  </div>
+
+  <div class="block prose">
+    <h3>Collisions are inevitable</h3>
+    <p>Because a hash function maps a huge space of possible keys down to a small number of buckets, two different keys will sometimes land on the same index — a <strong>collision</strong>. This isn't a bug; it's a certainty (the same logic as the "birthday paradox"). What matters is how the table handles it.</p>
+  </div>
+
+  <div class="block">
+    <h3>Comparison: collision resolution strategies</h3>
+    <table class="cmp-table">
+      <tr><th>Strategy</th><th>How it works</th><th>Trade-off</th></tr>
+      <tr><td><strong>Separate chaining</strong></td><td>Each bucket holds a small list; colliding keys are appended to that bucket's list.</td><td>Simple, handles high load factors gracefully; extra memory for list nodes.</td></tr>
+      <tr><td><strong>Open addressing</strong></td><td>On collision, probe for the next open slot (linear, quadratic, or double hashing).</td><td>Better cache locality, no extra memory; degrades badly as the table fills up.</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <h3>Interactive: watch chaining handle collisions</h3>
+    <div class="widget">
+      <div class="t">Insert keys into an 8-bucket table (chaining)</div>
+      <p style="font-size:13.5px;color:var(--muted);">Type a word and insert it. Watch which bucket it lands in — and what happens when two words collide.</p>
+      <div style="display:flex; gap:10px; margin:10px 0; flex-wrap:wrap;">
+        <input type="text" class="mini-input" id="hash-key-input" placeholder="e.g. cat" style="width:160px;">
+        <button class="small-btn" id="hash-insert-btn">Insert</button>
+        <button class="small-btn" id="hash-reset-btn">Reset table</button>
+      </div>
+      <div class="hash-buckets" id="hash-buckets"></div>
+      <div id="hash-status" style="font-family:var(--mono); font-size:12.5px; color:var(--muted); margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <div class="block prose">
+    <h3>Load factor</h3>
+    <p>The <strong>load factor</strong> is <code>number of entries / number of buckets</code>. As it climbs toward 1 (or beyond, with chaining), collisions become more frequent and performance degrades toward O(n). Most hash table implementations automatically resize (rehash into a bigger table) once the load factor crosses a threshold — commonly around 0.7.</p>
+  </div>
+
+  <div class="block">
+    <h3>Practical exercise</h3>
+    <div class="exercise">
+      <div class="t">Exercise 2.1 — Trace a hash insert by hand</div>
+      <p style="font-size:14px;">Table size = 5. Using <code>hash(key) = sum of ASCII codes % 5</code>, compute the bucket index for the key <code>"ab"</code> (ASCII: a=97, b=98).</p>
+      <textarea placeholder="Show your working..." id="ex2-input"></textarea>
+      <div class="exercise-actions">
+        <button class="small-btn" id="ex2-check">Reveal model answer</button>
+      </div>
+      <div class="exercise-feedback ok" id="ex2-feedback">
+        <strong>Model answer:</strong> 97 + 98 = 195. 195 % 5 = 0. The key "ab" hashes to bucket 0.
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Common misconceptions</h3>
+    <div class="misconception">
+      <div class="t">⚠ "A hash table has guaranteed O(1) lookups"</div>
+      <p>O(1) is the <em>average case</em> with a good hash function and reasonable load factor. Worst case (many collisions, or a poorly designed hash function) degrades to O(n).</p>
+    </div>
+    <div class="misconception">
+      <div class="t">⚠ "Hash tables keep things in order"</div>
+      <p>Standard hash tables have no guaranteed ordering — items land wherever their hash sends them. If you need order, you need a different structure (like a tree map) or an ordered hash map variant.</p>
+    </div>
+  </div>
+
+  <div class="block takeaways">
+    <h3>Key takeaways</h3>
+    <ul>
+      <li>A hash function maps keys to array indices, giving average O(1) access by key.</li>
+      <li>Collisions are unavoidable; chaining and open addressing are the two standard fixes.</li>
+      <li>Load factor governs performance — tables resize/rehash to keep it low.</li>
+      <li>Hash table guarantees are average-case, not worst-case.</li>
+    </ul>
+  </div>
+
+  <div id="quiz-m2"></div>
+</section>
+
+<!-- ================= MODULE 3 ================= -->
+<section id="m3" class="view module">
+  <div class="module-head">
+    <span class="module-tag">Module 3 / 4</span>
+    <h2>Practical Application — Patterns You'll Use Constantly</h2>
+  </div>
+  <p class="sub">Most array + hashing problems are variations of a small set of patterns. Learn to recognize them and you'll solve a huge fraction of real-world and interview problems.</p>
+
+  <div class="block prose">
+    <h3>Pattern 1 — Frequency counting</h3>
+    <p>Use a hash map to count occurrences of items in one pass. This turns an O(n²) "compare everything to everything" approach into a single O(n) scan.</p>
+  </div>
+  <pre><span class="cm"># frequency counting in Python</span>
+<span class="kw">def</span> <span class="fn">char_frequency</span>(s):
+    freq = {}
+    <span class="kw">for</span> ch <span class="kw">in</span> s:
+        freq[ch] = freq.get(ch, <span class="str">0</span>) + <span class="str">1</span>
+    <span class="kw">return</span> freq
+
+<span class="fn">char_frequency</span>(<span class="str">"hashing"</span>)
+<span class="cm"># {'h': 2, 'a': 1, 's': 1, 'i': 1, 'n': 1, 'g': 1}</span></pre>
+
+  <div class="block prose">
+    <h3>Pattern 2 — The "have I seen this before?" lookup (Two Sum)</h3>
+    <p>The classic Two Sum problem: given an array, find two numbers that add to a target. The brute-force way checks every pair — O(n²). With a hash map, you record each number as you scan and check whether its <em>complement</em> was already seen — O(n).</p>
+  </div>
+  <pre><span class="kw">def</span> <span class="fn">two_sum</span>(nums, target):
+    seen = {}  <span class="cm"># value -> index</span>
+    <span class="kw">for</span> i, n <span class="kw">in</span> <span class="fn">enumerate</span>(nums):
+        complement = target - n
+        <span class="kw">if</span> complement <span class="kw">in</span> seen:
+            <span class="kw">return</span> [seen[complement], i]
+        seen[n] = i
+    <span class="kw">return</span> []</pre>
+
+  <div class="block">
+    <h3>Interactive: trace Two Sum step by step</h3>
+    <div class="widget">
+      <div class="t">nums = [2, 7, 11, 15], target = 9</div>
+      <div class="arr-box-row" id="twosum-row"></div>
+      <button class="small-btn" id="twosum-step">Step forward ▶</button>
+      <button class="small-btn" id="twosum-reset">Reset</button>
+      <div id="twosum-status" style="font-family:var(--mono); font-size:12.5px; color:var(--muted); margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <div class="block prose">
+    <h3>Pattern 3 — Deduplication with sets</h3>
+    <p>A hash <strong>set</strong> is a hash map that only stores keys (no values) — perfect for "does this exist?" checks and removing duplicates in O(n), since membership testing (<code>x in set</code>) is O(1) average case, versus O(n) for checking membership in a list.</p>
+  </div>
+
+  <div class="analogy">
+    <div class="ico">🎟️</div>
+    <div>
+      <div class="t">Analogy: A guest list at the door</div>
+      <p>A bouncer with a hash-set guest list checks a name and instantly knows yes/no. A bouncer with an unsorted paper list has to scan the whole page every single time. Same job, wildly different speed at scale.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Comparison: when to reach for which structure</h3>
+    <table class="cmp-table">
+      <tr><th>Need</th><th>Best structure</th><th>Why</th></tr>
+      <tr><td>Fixed sequence, access by position</td><td>Array</td><td>O(1) index access, cache-friendly, ordered</td></tr>
+      <tr><td>"Have I seen this key/value before?"</td><td>Hash set</td><td>O(1) average membership check</td></tr>
+      <tr><td>Map a key to associated data</td><td>Hash map</td><td>O(1) average key → value lookup</td></tr>
+      <tr><td>Need sorted order + fast lookup</td><td>Balanced BST / ordered map</td><td>Hash tables don't preserve order</td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <h3>Practical exercise</h3>
+    <div class="exercise">
+      <div class="t">Exercise 3.1 — Design the approach</div>
+      <p style="font-size:14px;">Given an array of integers, how would you find the first number that appears <em>more than once</em>, in a single left-to-right pass, using O(n) time? Describe your approach in words.</p>
+      <textarea placeholder="Describe your approach..." id="ex3-input"></textarea>
+      <div class="exercise-actions">
+        <button class="small-btn" id="ex3-check">Reveal model answer</button>
+      </div>
+      <div class="exercise-feedback ok" id="ex3-feedback">
+        <strong>Model answer:</strong> Walk through the array once, keeping a hash set of numbers seen so far. For each number, check if it's already in the set (O(1)); if yes, that's your answer — return immediately. If not, add it to the set and continue. Total: O(n) time, O(n) space.
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Common misconceptions</h3>
+    <div class="misconception">
+      <div class="t">⚠ "I need to sort first to find duplicates"</div>
+      <p>Sorting works but costs O(n log n) and destroys original order. A hash set solves the same problem in O(n) and preserves the original sequence.</p>
+    </div>
+    <div class="misconception">
+      <div class="t">⚠ "Two Sum requires nested loops"</div>
+      <p>Nested loops are the brute-force O(n²) solution. The hash-map version does it in one pass by trading a bit of memory for a lot of speed — a very common trade-off in algorithm design.</p>
+    </div>
+  </div>
+
+  <div class="block takeaways">
+    <h3>Key takeaways</h3>
+    <ul>
+      <li>Frequency counting, "seen before" lookups, and deduplication are the three patterns behind most array+hash problems.</li>
+      <li>Hash maps/sets convert O(n²) brute-force scans into O(n) single passes by trading memory for speed.</li>
+      <li>Choose arrays for ordered, positional data; choose hash structures for fast keyed lookups.</li>
+    </ul>
+  </div>
+
+  <div id="quiz-m3"></div>
+</section>
+
+<!-- ================= MODULE 4 ================= -->
+<section id="m4" class="view module">
+  <div class="module-head">
+    <span class="module-tag">Module 4 / 4</span>
+    <h2>Mastery — Designing, Tuning, and Choosing Wisely</h2>
+  </div>
+  <p class="sub">The final stretch: what makes a hash function actually good, how real languages implement these structures, and how to reason about trade-offs like an engineer, not just a student.</p>
+
+  <div class="block prose">
+    <h3>Designing a decent hash function</h3>
+    <p>A naive hash function (like just summing character codes) can cluster keys badly — anagrams like "listen" and "silent" would hash identically. Production hash functions (like Python's, or general-purpose ones such as <strong>MurmurHash</strong> or <strong>FNV</strong>) mix bits thoroughly using multiplication, XOR, and bit-shifts so that even tiny changes to the key produce very different hash codes — this is called the <strong>avalanche effect</strong>.</p>
+  </div>
+
+  <div class="block">
+    <h3>Diagram: avalanche effect</h3>
+    <div class="diagram">
+      <svg viewBox="0 0 560 120" width="100%">
+        <text x="0" y="18" font-family="monospace" font-size="11" fill="#9195AE">"cat"  → hash → 10110100 11001010</text>
+        <text x="0" y="60" font-family="monospace" font-size="11" fill="#9195AE">"bat"  → hash → 01001101 00110101</text>
+        <text x="0" y="100" font-family="monospace" font-size="10.5" fill="#F5A623">One character changed → the entire output looks unrelated.</text>
+      </svg>
+      <div class="cap">Good hash functions avoid predictable patterns between similar-looking keys.</div>
+    </div>
+  </div>
+
+  <div class="block prose">
+    <h3>Amortized analysis, formally</h3>
+    <p>We touched on amortized O(1) append earlier — here's the intuition made precise. If doubling a size-n array costs O(n) but only happens once every n appends, the "extra" cost per append averages out to a constant. This is the same reasoning used to justify resizing hash tables: individual rehashes are expensive, but they happen rarely enough that the <em>average</em> cost per insertion stays O(1).</p>
+  </div>
+
+  <div class="analogy">
+    <div class="ico">🎒</div>
+    <div>
+      <div class="t">Analogy: Packing a growing suitcase</div>
+      <p>Imagine you keep buying souvenirs on a trip. Every time your suitcase is full, you buy a bigger one and repack everything — expensive, but it doesn't happen often, and each new suitcase lasts you twice as long as the last. Spread across the whole trip, "cost per souvenir" stays roughly constant. That's amortized analysis.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>How real languages implement this</h3>
+    <table class="cmp-table">
+      <tr><th>Language</th><th>Array-like</th><th>Hash-like</th></tr>
+      <tr><td>Python</td><td><code>list</code> (dynamic array)</td><td><code>dict</code>, <code>set</code> (hash table, open addressing)</td></tr>
+      <tr><td>JavaScript</td><td><code>Array</code> (hybrid, often dynamic)</td><td><code>Map</code>, <code>Set</code>, <code>Object</code></td></tr>
+      <tr><td>Java</td><td><code>ArrayList</code></td><td><code>HashMap</code>, <code>HashSet</code> (chaining, treeified buckets)</td></tr>
+      <tr><td>C++</td><td><code>std::vector</code></td><td><code>std::unordered_map</code>, <code>unordered_set</code></td></tr>
+    </table>
+  </div>
+
+  <div class="block">
+    <h3>Interactive: choose the right structure</h3>
+    <div class="widget">
+      <div class="t">Scenario picker</div>
+      <p style="font-size:13.5px; color:var(--muted); margin-bottom:12px;">Read each scenario and pick the best-fit structure. You'll get instant feedback with reasoning.</p>
+      <div id="scenario-picker"></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Practical exercise</h3>
+    <div class="exercise">
+      <div class="t">Exercise 4.1 — Trade-off reasoning</div>
+      <p style="font-size:14px;">You're building a leaderboard that needs (a) O(1) lookup of a player's score by username, and (b) the ability to quickly list the top 10 scores in order. Would a single hash map be enough? What would you add or change?</p>
+      <textarea placeholder="Explain your reasoning..." id="ex4-input"></textarea>
+      <div class="exercise-actions">
+        <button class="small-btn" id="ex4-check">Reveal model answer</button>
+      </div>
+      <div class="exercise-feedback ok" id="ex4-feedback">
+        <strong>Model answer:</strong> A hash map alone gives you fast lookup by username but no ordering — finding the top 10 would require scanning everything, O(n). A common solution: keep a hash map for O(1) username→score lookup, alongside a separate ordered structure (like a heap or sorted array/tree) that maintains the top scores, updated whenever a score changes. This is a classic "two structures, two jobs" trade-off.
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Common misconceptions</h3>
+    <div class="misconception">
+      <div class="t">⚠ "A hash map is always the best choice for lookups"</div>
+      <p>If you need ordering, range queries ("give me everything between X and Y"), or predictable worst-case performance, a balanced tree structure often beats a hash map despite the better average case.</p>
+    </div>
+    <div class="misconception">
+      <div class="t">⚠ "Bigger hash tables are always better"</div>
+      <p>Oversized tables waste memory and hurt cache performance. Tuning load factor and initial capacity matters in performance-sensitive code.</p>
+    </div>
+  </div>
+
+  <div class="block takeaways">
+    <h3>Key takeaways</h3>
+    <ul>
+      <li>Good hash functions exhibit the avalanche effect, spreading similar keys far apart.</li>
+      <li>Amortized analysis explains why occasional expensive operations still yield fast average performance.</li>
+      <li>Every mainstream language pairs a dynamic array type with a hash-table type — recognize both.</li>
+      <li>Structure choice is about trade-offs: ordering, worst-case guarantees, and memory, not just average speed.</li>
+    </ul>
+  </div>
+
+  <div id="quiz-m4"></div>
+</section>
+
+<!-- ================= CLOSING ================= -->
+<section id="closing" class="view module section-border-top">
+  <div class="final-hero">
+    <h2>🏁 Final Practical Challenge</h2>
+    <p>Design (in pseudocode or real code) a function <code>group_anagrams(words)</code> that groups a list of words into sets of anagrams — words made of the same letters in a different order — e.g. <code>["eat","tea","tan","ate","nat","bat"]</code> → <code>[["eat","tea","ate"],["tan","nat"],["bat"]]</code>. Use everything from this tutorial: think about what makes a good <strong>hash key</strong> for a group of anagrams (hint: a sorted version of the word is identical for every anagram in that group), and use a hash map to bucket words by that key in a single O(n · k log k) pass.</p>
+  </div>
+
+  <div class="block" style="margin-top:24px;">
+    <div class="exercise">
+      <div class="t">Your solution</div>
+      <textarea placeholder="Write your solution here — pseudocode or real code..." id="final-input" style="min-height:160px;"></textarea>
+      <div class="exercise-actions">
+        <button class="small-btn" id="final-check">Reveal reference solution</button>
+        <button class="btn-primary" id="claim-badge" style="padding:8px 16px; font-size:13px;">Claim Hash Master badge 🏆</button>
+      </div>
+      <div class="exercise-feedback ok" id="final-feedback">
+<pre style="margin-top:8px;"><span class="kw">def</span> <span class="fn">group_anagrams</span>(words):
+    groups = {}
+    <span class="kw">for</span> w <span class="kw">in</span> words:
+        key = <span class="fn">''.join</span>(<span class="fn">sorted</span>(w))   <span class="cm"># same for every anagram</span>
+        groups.setdefault(key, []).append(w)
+    <span class="kw">return</span> <span class="fn">list</span>(groups.values())</pre>
+        Every word in the same anagram group produces the identical sorted-letters key, so the hash map naturally clusters them into the same bucket — turning a comparison problem into a single-pass hashing problem.
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2 style="font-size:22px; margin-bottom:6px;">📋 Cheat Sheet</h2>
+    <div class="cheat-grid">
+      <div class="cheat-card">
+        <h4>Array complexity</h4>
+        <table>
+          <tr><td>Access by index</td><td>O(1)</td></tr>
+          <tr><td>Append (amortized)</td><td>O(1)</td></tr>
+          <tr><td>Insert/delete at front/middle</td><td>O(n)</td></tr>
+          <tr><td>Search (unsorted)</td><td>O(n)</td></tr>
+          <tr><td>Search (sorted, binary search)</td><td>O(log n)</td></tr>
+        </table>
+      </div>
+      <div class="cheat-card">
+        <h4>Hash table complexity (average)</h4>
+        <table>
+          <tr><td>Insert</td><td>O(1)</td></tr>
+          <tr><td>Lookup</td><td>O(1)</td></tr>
+          <tr><td>Delete</td><td>O(1)</td></tr>
+          <tr><td>Worst case (bad hash / high load)</td><td>O(n)</td></tr>
+        </table>
+      </div>
+      <div class="cheat-card">
+        <h4>Core formula</h4>
+        <table>
+          <tr><td>Array address</td><td>base + i×size</td></tr>
+          <tr><td>Hash bucket index</td><td>hash(key) % N</td></tr>
+          <tr><td>Load factor</td><td>entries / buckets</td></tr>
+        </table>
+      </div>
+      <div class="cheat-card">
+        <h4>Pattern → structure</h4>
+        <table>
+          <tr><td>Count occurrences</td><td>hash map</td></tr>
+          <tr><td>"Seen before?" check</td><td>hash set</td></tr>
+          <tr><td>Pair-sum lookup</td><td>hash map</td></tr>
+          <tr><td>Ordered/range data</td><td>array / tree</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2 style="font-size:22px; margin-bottom:10px;">📝 Summary Notes</h2>
+    <div class="obj-card">
+      <ul>
+        <li>Arrays give O(1) positional access because addresses are computed, not searched.</li>
+        <li>Dynamic arrays trade occasional O(n) resizes for O(1) amortized appends.</li>
+        <li>Hash functions turn keys into array indices, enabling average O(1) lookup by key.</li>
+        <li>Collisions are handled via chaining (lists per bucket) or open addressing (probing).</li>
+        <li>Frequency counting, "seen-before" checks, and pair-lookups are the core hashing patterns.</li>
+        <li>Structure choice is a trade-off between speed, ordering, and worst-case guarantees.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2 style="font-size:22px; margin-bottom:6px;">📚 Continue Learning</h2>
+    <div class="resource-grid">
+      <div class="resource-card">
+        <h4>Books</h4>
+        <ul>
+          <li>"Introduction to Algorithms" — Cormen, Leiserson, Rivest, Stein (CLRS)</li>
+          <li>"Grokking Algorithms" — Aditya Bhargava</li>
+          <li>"Cracking the Coding Interview" — Gayle Laakmann McDowell</li>
+        </ul>
+      </div>
+      <div class="resource-card">
+        <h4>Documentation</h4>
+        <ul>
+          <li>MDN: JavaScript Map &amp; Set</li>
+          <li>Python docs: <code>dict</code> and <code>collections</code> module</li>
+          <li>Java docs: <code>HashMap</code> / <code>HashSet</code></li>
+        </ul>
+      </div>
+      <div class="resource-card">
+        <h4>Research &amp; deep dives</h4>
+        <ul>
+          <li>"Cuckoo Hashing" — Pagh &amp; Rodler (2001)</li>
+          <li>"Consistent Hashing and Random Trees" — Karger et al. (1997)</li>
+          <li>Robin Hood hashing — open-addressing variant</li>
+        </ul>
+      </div>
+      <div class="resource-card">
+        <h4>Communities</h4>
+        <ul>
+          <li>r/leetcode, r/learnprogramming</li>
+          <li>Stack Overflow — algorithm &amp; data-structures tags</li>
+          <li>CS Discord / Discord study servers for DSA</li>
+        </ul>
+      </div>
+      <div class="resource-card">
+        <h4>Practice platforms</h4>
+        <ul>
+          <li>LeetCode — Arrays &amp; Hashing study plan</li>
+          <li>HackerRank — Data Structures track</li>
+          <li>NeetCode.io — curated pattern roadmap</li>
+        </ul>
+      </div>
+      <div class="resource-card">
+        <h4>Search keywords</h4>
+        <div class="kw-chip-row">
+          <span class="kw-chip">hash collision resolution</span>
+          <span class="kw-chip">amortized time complexity</span>
+          <span class="kw-chip">two sum hashmap</span>
+          <span class="kw-chip">load factor rehashing</span>
+          <span class="kw-chip">open addressing vs chaining</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2 style="font-size:22px; margin-bottom:10px;">🤖 Prompts for further AI-assisted learning</h2>
+    <div class="obj-card">
+      <ul>
+        <li>"Walk me through implementing a hash table from scratch in [my language], including resizing."</li>
+        <li>"Give me 5 medium-difficulty LeetCode-style problems that use hash maps, with hints but not full solutions."</li>
+        <li>"Explain the difference between Python's dict implementation and Java's HashMap at a low level."</li>
+        <li>"Quiz me on array vs. hash table trade-offs with real-world system design scenarios."</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="print-panel">
+    <button class="btn-secondary" id="print-btn-2">🖨 Print / save these notes as PDF</button>
+    <button class="btn-secondary" id="restart-btn">↺ Restart tutorial</button>
+  </div>
+</section>
+
+</main>
+
+<footer>Interactive Learning Studio · Arrays &amp; Hashing · Generated for focused, single-session mastery.</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- State ---------------- */
+const state = {
+  xp: 0,
+  modulesComplete: {m1:false, m2:false, m3:false, m4:false},
+  quizScores: {m1:0, m2:0, m3:0, m4:0}
+};
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function addXP(n){
+  state.xp += n;
+  document.getElementById('xp-pill').textContent = '⚡ ' + state.xp + ' XP';
+  const done = Object.values(state.modulesComplete).filter(Boolean).length;
+  document.getElementById('xp-counter').textContent = state.xp + ' XP · ' + done + '/4 modules complete';
+}
+
+/* ---------------- Navigation ---------------- */
+const chips = document.querySelectorAll('.nav-chip');
+const views = document.querySelectorAll('.view');
+
+function showView(id){
+  views.forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  chips.forEach(c=>c.classList.toggle('active', c.dataset.target===id));
+  window.scrollTo({top:0, behavior:'smooth'});
+  updateTopProgress();
+}
+chips.forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    if(chip.classList.contains('locked')) { toast('Complete the previous module quiz to unlock this.'); return; }
+    showView(chip.dataset.target);
+  });
+});
+function unlockChip(target){
+  const c = document.querySelector('.nav-chip[data-target="'+target+'"]');
+  if(c){ c.classList.remove('locked'); c.classList.add('unlocked'); }
+}
+function markComplete(target){
+  const c = document.querySelector('.nav-chip[data-target="'+target+'"]');
+  if(c) c.classList.add('complete');
+}
+
+document.getElementById('start-btn').addEventListener('click', ()=>showView('m1'));
+document.getElementById('scroll-objectives').addEventListener('click', ()=>{
+  document.getElementById('objectives-anchor').scrollIntoView({behavior:'smooth', block:'start'});
+});
+document.getElementById('print-btn').addEventListener('click', ()=>window.print());
+document.getElementById('print-btn-2').addEventListener('click', ()=>window.print());
+document.getElementById('restart-btn').addEventListener('click', ()=>{ showView('intro'); });
+
+function updateTopProgress(){
+  const order = ['intro','m1','m2','m3','m4','closing'];
+  const active = document.querySelector('.view.active').id;
+  const idx = order.indexOf(active);
+  document.getElementById('top-progress-fill').style.width = ((idx+1)/order.length*100) + '%';
+}
+
+/* ---------------- Hero SVG build ---------------- */
+(function buildHero(){
+  const cellsG = document.getElementById('hero-cells');
+  const vals = ['A','B','C','D','E'];
+  vals.forEach((v,i)=>{
+    const x = 20 + i*56;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', 30); rect.setAttribute('width', 46); rect.setAttribute('height', 40);
+    rect.setAttribute('rx', 6); rect.setAttribute('fill', '#1E2338'); rect.setAttribute('stroke', '#2A2F48');
+    cellsG.appendChild(rect);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', x+23); txt.setAttribute('y', 55); txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('font-family','monospace'); txt.setAttribute('font-size','13'); txt.setAttribute('fill','#EDEEF5');
+    txt.textContent = v;
+    cellsG.appendChild(txt);
+    const idx = document.createElementNS('http://www.w3.org/2000/svg','text');
+    idx.setAttribute('x', x+23); idx.setAttribute('y', 82); idx.setAttribute('text-anchor','middle');
+    idx.setAttribute('font-family','monospace'); idx.setAttribute('font-size','9'); idx.setAttribute('fill','#565C79');
+    idx.textContent = i;
+    cellsG.appendChild(idx);
+  });
+  const bucketsG = document.getElementById('hero-buckets');
+  for(let i=0;i<6;i++){
+    const x = 20 + i*56;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', 165); rect.setAttribute('width', 46); rect.setAttribute('height', 40);
+    rect.setAttribute('rx', 6); rect.setAttribute('fill', '#171B2E'); rect.setAttribute('stroke', '#7C6FF0'); rect.setAttribute('stroke-dasharray','3 2');
+    bucketsG.appendChild(rect);
+    const idx = document.createElementNS('http://www.w3.org/2000/svg','text');
+    idx.setAttribute('x', x+23); idx.setAttribute('y', 220); idx.setAttribute('text-anchor','middle');
+    idx.setAttribute('font-family','monospace'); idx.setAttribute('font-size','9'); idx.setAttribute('fill','#565C79');
+    idx.textContent = i;
+    bucketsG.appendChild(idx);
+  }
+  bucketsG.children.length; // noop
+  const labels = ['B',null,'D','A',null,'C'];
+  labels.forEach((v,i)=>{
+    if(!v) return;
+    const x = 20 + i*56;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', x+23); txt.setAttribute('y', 190); txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('font-family','monospace'); txt.setAttribute('font-size','13'); txt.setAttribute('fill','#F5A623');
+    txt.textContent = v;
+    bucketsG.appendChild(txt);
+  });
+})();
+
+/* ---------------- Module 1: memory diagram + address calc ---------------- */
+(function buildMemDiagram(){
+  const g = document.getElementById('mem-cells');
+  for(let i=0;i<8;i++){
+    const x = 10 + i*74;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', 34); rect.setAttribute('width', 64); rect.setAttribute('height', 44);
+    rect.setAttribute('rx', 6); rect.setAttribute('fill', i===3?'#F5A62333':'#1E2338'); rect.setAttribute('stroke', i===3?'#F5A623':'#2A2F48');
+    g.appendChild(rect);
+    const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t1.setAttribute('x', x+32); t1.setAttribute('y', 55); t1.setAttribute('text-anchor','middle');
+    t1.setAttribute('font-family','monospace'); t1.setAttribute('font-size','11'); t1.setAttribute('fill','#EDEEF5');
+    t1.textContent = 'arr['+i+']';
+    g.appendChild(t1);
+    const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t2.setAttribute('x', x+32); t2.setAttribute('y', 70); t2.setAttribute('text-anchor','middle');
+    t2.setAttribute('font-family','monospace'); t2.setAttribute('font-size','9.5'); t2.setAttribute('fill','#565C79');
+    t2.textContent = (1000+i*4);
+    g.appendChild(t2);
+  }
+})();
+
+(function addrCalc(){
+  const row = document.getElementById('addr-row');
+  for(let i=0;i<8;i++){
+    const cell = document.createElement('div');
+    cell.className = 'arr-cell';
+    cell.id = 'addr-cell-'+i;
+    cell.innerHTML = i + '<span class="idx">'+(1000+i*4)+'</span>';
+    row.appendChild(cell);
+  }
+  document.getElementById('addr-calc').addEventListener('click', ()=>{
+    let i = parseInt(document.getElementById('addr-index').value, 10);
+    if(isNaN(i) || i<0) i=0; if(i>7) i=7;
+    document.getElementById('addr-index').value = i;
+    const addr = 1000 + i*4;
+    document.getElementById('addr-result').textContent = '1000 + ('+i+' × 4) = '+addr;
+    document.querySelectorAll('.arr-cell').forEach(c=>c.classList.remove('hit'));
+    document.getElementById('addr-cell-'+i).classList.add('hit');
+    addXP(2);
+  });
+})();
+
+/* ---------------- Module 2: hashing widget ---------------- */
+(function hashWidget(){
+  const N = 8;
+  const bucketsEl = document.getElementById('hash-buckets');
+  const buckets = Array.from({length:N}, ()=>[]);
+
+  const diagBuckets = document.getElementById('bucket-row-diagram');
+  for(let i=0;i<8;i++){
+    const x = 90 + i*45;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', 110); rect.setAttribute('width', 38); rect.setAttribute('height', 34);
+    rect.setAttribute('rx', 5); rect.setAttribute('fill', i===4?'#F5A62333':'#171B2E'); rect.setAttribute('stroke', i===4?'#F5A623':'#2A2F48');
+    diagBuckets.appendChild(rect);
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', x+19); t.setAttribute('y', 131); t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-family','monospace'); t.setAttribute('font-size','10'); t.setAttribute('fill','#9195AE');
+    t.textContent = i;
+    diagBuckets.appendChild(t);
+  }
+
+  function renderBuckets(){
+    bucketsEl.innerHTML = '';
+    for(let i=0;i<N;i++){
+      const b = document.createElement('div');
+      b.className = 'bucket';
+      let html = '<div class="idx">bucket '+i+'</div>';
+      buckets[i].forEach(k=>{ html += '<div class="item">'+k+'</div>'; });
+      b.innerHTML = html;
+      bucketsEl.appendChild(b);
+    }
+  }
+  function simpleHash(key){
+    let sum = 0;
+    for(let i=0;i<key.length;i++) sum += key.charCodeAt(i);
+    return sum % N;
+  }
+  document.getElementById('hash-insert-btn').addEventListener('click', ()=>{
+    const input = document.getElementById('hash-key-input');
+    const key = input.value.trim().toLowerCase();
+    if(!key){ toast('Type a word first.'); return; }
+    const idx = simpleHash(key);
+    const collided = buckets[idx].length>0;
+    buckets[idx].push(key);
+    renderBuckets();
+    document.getElementById('hash-status').textContent = '"'+key+'" → hash % '+N+' = bucket '+idx + (collided ? '  (collision! chained in same bucket)' : '');
+    input.value='';
+    addXP(2);
+  });
+  document.getElementById('hash-reset-btn').addEventListener('click', ()=>{
+    for(let i=0;i<N;i++) buckets[i]=[];
+    renderBuckets();
+    document.getElementById('hash-status').textContent = 'Table reset.';
+  });
+  renderBuckets();
+})();
+
+/* ---------------- Module 3: two sum tracer ---------------- */
+(function twoSumTracer(){
+  const nums = [2,7,11,15];
+  const target = 9;
+  const row = document.getElementById('twosum-row');
+  nums.forEach((n,i)=>{
+    const cell = document.createElement('div');
+    cell.className='arr-cell'; cell.id='ts-cell-'+i;
+    cell.innerHTML = n + '<span class="idx">'+i+'</span>';
+    row.appendChild(cell);
+  });
+  let step = 0;
+  const seen = {};
+  const statusEl = document.getElementById('twosum-status');
+  function reset(){
+    step=0; for(const k in seen) delete seen[k];
+    document.querySelectorAll('#twosum-row .arr-cell').forEach(c=>c.classList.remove('hit','active-scan'));
+    statusEl.textContent = 'Press "Step forward" to begin tracing.';
+  }
+  document.getElementById('twosum-step').addEventListener('click', ()=>{
+    if(step>=nums.length){ statusEl.textContent='Trace complete. No more elements.'; return; }
+    document.querySelectorAll('#twosum-row .arr-cell').forEach(c=>c.classList.remove('active-scan'));
+    const n = nums[step];
+    const complement = target-n;
+    const cell = document.getElementById('ts-cell-'+step);
+    cell.classList.add('active-scan');
+    if(complement in seen){
+      cell.classList.add('hit');
+      document.getElementById('ts-cell-'+seen[complement]).classList.add('hit');
+      statusEl.textContent = 'nums['+step+']='+n+', complement='+complement+' found at index '+seen[complement]+' → answer: ['+seen[complement]+', '+step+']';
+      addXP(3);
+    } else {
+      seen[n]=step;
+      statusEl.textContent = 'nums['+step+']='+n+', complement='+complement+' not seen yet → store {'+n+': '+step+'} in hash map.';
+    }
+    step++;
+  });
+  document.getElementById('twosum-reset').addEventListener('click', reset);
+  reset();
+})();
+
+/* ---------------- Module 4: scenario picker ---------------- */
+(function scenarioPicker(){
+  const scenarios = [
+    {q:'You need to store a fixed list of RGB pixel values and access any pixel by (x,y) position instantly.', options:['Array','Hash map','Hash set'], correct:0, why:'Positional, fixed-size data with index-based access is exactly what arrays are built for.'},
+    {q:'You need to check in O(1) whether a username has already been registered.', options:['Array','Hash set','Sorted array'], correct:1, why:'Membership testing with no associated data is the textbook use case for a hash set.'},
+    {q:'You need to map product IDs to product details for instant retrieval during checkout.', options:['Hash map','Array','Linked list'], correct:0, why:"Key → value lookup by a non-sequential ID is a hash map's core job."},
+    {q:'You need to repeatedly find the smallest of a changing set of numbers.', options:['Hash map','Min-heap', 'Hash set'], correct:1, why:"Hash structures don't track order/priority; a heap is designed for repeated min/max extraction."}
+  ];
+  const container = document.getElementById('scenario-picker');
+  scenarios.forEach((s,i)=>{
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom='18px';
+    wrap.style.paddingBottom='16px';
+    if(i<scenarios.length-1) wrap.style.borderBottom='1px solid var(--border)';
+    const p = document.createElement('p');
+    p.style.fontSize='14px'; p.style.marginBottom='10px';
+    p.textContent = (i+1)+'. '+s.q;
+    wrap.appendChild(p);
+    const optRow = document.createElement('div');
+    optRow.style.display='flex'; optRow.style.gap='8px'; optRow.style.flexWrap='wrap';
+    s.options.forEach((opt,oi)=>{
+      const btn = document.createElement('button');
+      btn.className='small-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', ()=>{
+        if(btn.dataset.answered) return;
+        Array.from(optRow.children).forEach(b=>b.dataset.answered='1');
+        if(oi===s.correct){ btn.style.borderColor='var(--green)'; btn.style.color='#8FE3AC'; addXP(3); }
+        else { btn.style.borderColor='var(--red)'; btn.style.color='#F3A8AC'; optRow.children[s.correct].style.borderColor='var(--green)'; optRow.children[s.correct].style.color='#8FE3AC'; }
+        const why = document.createElement('div');
+        why.style.fontSize='12.5px'; why.style.color='var(--muted)'; why.style.marginTop='8px';
+        why.textContent = s.why;
+        wrap.appendChild(why);
+      });
+      optRow.appendChild(btn);
+    });
+    wrap.appendChild(optRow);
+    container.appendChild(wrap);
+  });
+})();
+
+/* ---------------- Exercise reveal buttons ---------------- */
+[['ex1-check','ex1-feedback'],['ex2-check','ex2-feedback'],['ex3-check','ex3-feedback'],['ex4-check','ex4-feedback'],['final-check','final-feedback']].forEach(([btnId,fbId])=>{
+  const btn = document.getElementById(btnId);
+  if(!btn) return;
+  btn.addEventListener('click', ()=>{
+    const fb = document.getElementById(fbId);
+    fb.classList.toggle('show');
+    if(fb.classList.contains('show')) addXP(3);
+  });
+});
+
+document.getElementById('claim-badge').addEventListener('click', ()=>{
+  toast('🏆 Hash Master badge claimed! Great work.');
+  addXP(10);
+});
+
+/* ---------------- Quiz engine ---------------- */
+const quizData = {
+  m1: {
+    title:'Module 1 Check — Foundations',
+    nextTarget:'m2',
+    questions:[
+      {q:'Why is arr[i] access O(1)?', opts:['The computer searches from the start each time','The address is computed directly via base + i×size','Arrays are always sorted','JavaScript caches every index'], correct:1, explain:'Address = base_address + (i × element_size) is simple arithmetic, independent of array size.'},
+      {q:'Why is inserting at the front of an array O(n)?', opts:['It triggers garbage collection','Every existing element must shift one position','The array must be re-sorted','It always doubles the array size'], correct:1, explain:'To make room at the front, every element after it must move over by one slot.'},
+      {q:'What does "amortized O(1) append" mean?', opts:['Every single append takes the same tiny constant time, no exceptions','Appending is always O(n)','Occasional expensive resizes are averaged out over many cheap appends','Amortized means the array is compressed'], correct:2, explain:'Resizing is O(n) but rare; averaged across many appends, the cost per append is O(1).'},
+      {q:'Which operation is O(n) on an unsorted array?', opts:['arr[i] access','Appending with spare capacity','Searching for a specific value','Reading the array length'], correct:2, explain:'Without sorting or hashing, finding a value requires checking elements one by one.'}
+    ]
+  },
+  m2: {
+    title:'Module 2 Check — Hashing',
+    nextTarget:'m3',
+    questions:[
+      {q:'What does a hash function fundamentally do?', opts:['Sorts an array','Deterministically maps a key to a number/index','Encrypts data permanently','Compresses memory usage'], correct:1, explain:'A hash function converts a key into a numeric hash code, later reduced to a valid bucket index.'},
+      {q:'What causes a collision?', opts:['Two different keys hashing to the same bucket index','A hash function returning a negative number','The table having zero entries','Using a set instead of a map'], correct:0, explain:'Collisions happen when the hash function maps multiple keys to the same index — mathematically inevitable with limited buckets.'},
+      {q:'What does separate chaining do on a collision?', opts:['Deletes the older key','Throws an error and stops','Appends the new key to a list stored at that bucket','Doubles the table size immediately'], correct:2, explain:'Chaining keeps a small list per bucket so multiple keys can coexist at the same index.'},
+      {q:'What happens as load factor rises toward 1?', opts:['Performance improves','Collisions become more frequent, degrading performance toward O(n)','The table becomes read-only','Nothing changes'], correct:1, explain:'A high load factor means buckets fill up, increasing the chance and length of collision chains.'}
+    ]
+  },
+  m3: {
+    title:'Module 3 Check — Application',
+    nextTarget:'m4',
+    questions:[
+      {q:'The brute-force Two Sum approach is O(n²) because:', opts:['It sorts the array first','It checks every pair of elements','It uses recursion','It hashes every element'], correct:1, explain:'Comparing every element to every other element is a nested loop — O(n²).'},
+      {q:'What makes the hash-map Two Sum solution O(n)?', opts:['It skips half the array','It looks up each complement in O(1) instead of scanning','It sorts the array in O(n)','It uses two arrays instead of one'], correct:1, explain:'Checking "have I seen the complement?" via a hash map is O(1) average, so one full pass is O(n) total.'},
+      {q:'A hash set is best suited for:', opts:['Storing key-value pairs with associated data','Fast membership testing with no associated value','Preserving insertion order','Sorting numbers'], correct:1, explain:'A set only cares about "does this key exist?" — no value payload needed.'},
+      {q:'Which is generally NOT a good fit for a plain hash map?', opts:['Counting word frequency','Looking up a user profile by ID','Retrieving the top 10 highest scores in order','Checking for duplicate entries'], correct:2, explain:'Hash maps have no ordering guarantee, so ranked/ordered queries need a different or additional structure.'}
+    ]
+  },
+  m4: {
+    title:'Module 4 Check — Mastery',
+    nextTarget:'closing',
+    questions:[
+      {q:'The "avalanche effect" in a hash function means:', opts:['Hash values always increase over time','A tiny change in the key produces a very different hash','Collisions never happen','The table doubles automatically'], correct:1, explain:'Good hash functions scatter similar keys unpredictably, avoiding clustering.'},
+      {q:'Amortized analysis is used to explain:', opts:['Why sorting is always O(n log n)','Why occasional expensive operations still average out to fast performance','Why hash maps never collide','Why arrays are slower than linked lists'], correct:1, explain:'It spreads the cost of rare expensive operations (like resizing) across many cheap ones.'},
+      {q:'Which structure would you add alongside a hash map to maintain a ranked leaderboard?', opts:['Another hash map','A heap or sorted structure for ordering', 'A second hash set','Nothing — one hash map is enough'], correct:1, explain:'Hash maps give O(1) lookup but no order; a heap/sorted structure handles ranking.'},
+      {q:'Which is true about hash table worst-case performance?', opts:['It is always O(1), guaranteed','It can degrade to O(n) with poor hashing or high load factor','It is always O(log n)','Worst case does not exist for hash tables'], correct:1, explain:'Average case is O(1), but pathological collisions or an unmanaged load factor can push it to O(n).'}
+    ]
+  }
+};
+
+function buildQuiz(moduleKey){
+  const data = quizData[moduleKey];
+  const container = document.getElementById('quiz-'+moduleKey);
+  let currentQ = 0;
+  const answers = new Array(data.questions.length).fill(null);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'quiz';
+  wrap.innerHTML = `
+    <div class="quiz-head">
+      <h3>📝 ${data.title}</h3>
+      <span class="quiz-progress-label" id="${moduleKey}-progress-label">Question 1 of ${data.questions.length}</span>
+    </div>
+    <div id="${moduleKey}-q-container"></div>
+    <div class="quiz-results" id="${moduleKey}-results">
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle class="bg" cx="60" cy="60" r="50"></circle>
+          <circle class="fg" id="${moduleKey}-ring-fg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+        </svg>
+        <div class="label" id="${moduleKey}-score-label">0/4</div>
+      </div>
+      <h4 id="${moduleKey}-result-title"></h4>
+      <p id="${moduleKey}-result-sub"></p>
+      <button class="btn-primary" id="${moduleKey}-continue-btn">Continue →</button>
+    </div>
+  `;
+  container.appendChild(wrap);
+
+  const qContainer = wrap.querySelector('#'+moduleKey+'-q-container');
+  data.questions.forEach((q,qi)=>{
+    const qb = document.createElement('div');
+    qb.className = 'q-block' + (qi===0 ? ' show' : '');
+    qb.id = moduleKey+'-q'+qi;
+    let optsHtml = '';
+    q.opts.forEach((opt,oi)=>{
+      optsHtml += `<button class="q-option" data-oi="${oi}">${opt}</button>`;
+    });
+    qb.innerHTML = `
+      <div class="q-prompt">${qi+1}. ${q.q}</div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explain" id="${moduleKey}-explain-${qi}"></div>
+      <div class="quiz-nav"><button class="small-btn" id="${moduleKey}-next-${qi}" style="display:none;">Next question →</button></div>
+    `;
+    qContainer.appendChild(qb);
+
+    qb.querySelectorAll('.q-option').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(answers[qi]!==null) return;
+        const oi = parseInt(btn.dataset.oi,10);
+        answers[qi] = oi;
+        qb.querySelectorAll('.q-option').forEach(b=>b.disabled=true);
+        if(oi===q.correct){
+          btn.classList.add('correct');
+          addXP(5);
+        } else {
+          btn.classList.add('incorrect');
+          qb.querySelectorAll('.q-option')[q.correct].classList.add('correct');
+        }
+        const ex = document.getElementById(moduleKey+'-explain-'+qi);
+        ex.textContent = '💡 ' + q.explain;
+        ex.classList.add('show');
+        const nextBtn = document.getElementById(moduleKey+'-next-'+qi);
+        nextBtn.style.display='inline-block';
+        nextBtn.textContent = (qi === data.questions.length-1) ? 'See results →' : 'Next question →';
+      });
+    });
+
+    document.getElementById(moduleKey+'-next-'+qi).addEventListener('click', ()=>{
+      if(qi === data.questions.length-1){
+        showResults();
+      } else {
+        qb.classList.remove('show');
+        document.getElementById(moduleKey+'-q'+(qi+1)).classList.add('show');
+        document.getElementById(moduleKey+'-progress-label').textContent = 'Question '+(qi+2)+' of '+data.questions.length;
+      }
+    });
+  });
+
+  function showResults(){
+    qContainer.style.display='none';
+    wrap.querySelector('.quiz-head').style.display='none';
+    const results = wrap.querySelector('#'+moduleKey+'-results');
+    results.classList.add('show');
+    const score = answers.reduce((acc,a,i)=> acc + (a===data.questions[i].correct?1:0), 0);
+    state.quizScores[moduleKey] = score;
+    document.getElementById(moduleKey+'-score-label').textContent = score+'/'+data.questions.length;
+    const circumference = 314;
+    const offset = circumference - (score/data.questions.length)*circumference;
+    document.getElementById(moduleKey+'-ring-fg').style.strokeDashoffset = offset;
+    const titleEl = document.getElementById(moduleKey+'-result-title');
+    const subEl = document.getElementById(moduleKey+'-result-sub');
+    if(score===data.questions.length){ titleEl.textContent='Perfect score! 🎯'; subEl.textContent="You've fully mastered this module."; }
+    else if(score>=3){ titleEl.textContent='Great work! ✅'; subEl.textContent='Solid understanding — next module unlocked.'; }
+    else { titleEl.textContent='Good effort — review recommended.'; subEl.textContent='Consider re-reading the key takeaways above before continuing.'; }
+
+    state.modulesComplete[moduleKey]=true;
+    markComplete(moduleKey);
+    unlockChip(data.nextTarget);
+    addXP(score*2);
+    toast('Module complete — '+data.nextTarget+' unlocked!');
+  }
+
+  document.getElementById(moduleKey+'-continue-btn').addEventListener('click', ()=>{
+    showView(data.nextTarget);
+  });
+}
+
+['m1','m2','m3','m4'].forEach(buildQuiz);
+
+/* init */
+updateTopProgress();
+addXP(0);
+
+})();
+</script>
+</body>
+</html>
