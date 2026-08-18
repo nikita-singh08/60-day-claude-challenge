@@ -290,3 +290,14 @@ I'm participating in the 60 Days of AI Challenge to improve my AI skills, build 
 - Downloaded the processed PDF files.
 - Learned how AI can be used to build practical document-processing and productivity tools.
 - Explored browser-based file handling and PDF processing workflows.
+
+## Day 40 – AI Assistant Builder
+
+- Built an AI Assistant Builder using Claude AI.
+- Created and tested a custom AI assistant through an interactive HTML application.
+- Answered the Claude interview questions using the provided MCQ quiz format.
+- Tested the generated AI assistant and reviewed its behavior.
+- Reviewed the generated system prompt to understand how assistant instructions are structured.
+- Explored the documentation panel and learned how the assistant configuration works.
+- Published the Claude artifact to test the assistant inside Claude without directly configuring an Anthropic API key.
+- Captured screenshots of the assistant, system prompt, and documentation.
